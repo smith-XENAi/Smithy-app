@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v4.8 (API Connect)</title>
+    <title>Smithy Director Studio v4.9 (Model Selector)</title>
     <style>
         /* v2.0 블랙 에디션 디자인 유지 */
         :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
@@ -16,91 +16,117 @@
         .sub-title { font-size: 13px; color: #888; letter-spacing: 1px; }
 
         .top-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-        
-        /* API 설정창 스타일 */
-        .api-settings { background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 10px; width: 100%; display: flex; gap: 10px; align-items: center; }
-        .api-input { flex: 1; background: #222; border: 1px solid #444; color: var(--neon); padding: 5px 10px; border-radius: 4px; font-size: 11px; }
-        
         .lang-switcher { display: flex; gap: 5px; }
         .lang-btn { background: #222; border: 1px solid #444; color: #888; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; }
+        .lang-btn:hover { border-color: var(--neon); color: #fff; }
         .lang-btn.active { background: var(--neon); color: #000; border-color: var(--neon); }
 
         .link-group { display: flex; align-items: center; gap: 8px; }
-        .nav-btn { padding: 6px 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 20px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+        .cta-text { font-size: 11px; color: var(--pro); font-weight: bold; animation: blink 2s infinite; margin-right: 5px; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .nav-btn { padding: 6px 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 20px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
+        .nav-btn:hover { border-color: var(--neon); transform: translateY(-2px); background: #444; }
         
-        .settings-panel { background: var(--panel); padding: 25px; border-radius: 12px; margin-bottom: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .settings-panel { background: var(--panel); padding: 25px; border-radius: 12px; margin-bottom: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; box-shadow: 0 4px 15px rgba(255,255,255,0.05); }
         .full-width { grid-column: span 2; }
         
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #fff; font-size: 14px; }
-        input[type="text"], select, input[type="number"] { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input[type="text"], select, input[type="number"], input[type="password"] { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input:focus, select:focus { border-color: var(--neon); outline: none; }
 
         .input-group { display: flex; gap: 10px; }
-        .tool-btn { padding: 0 15px; background: #444; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: nowrap; }
-        .tool-btn:disabled { opacity: 0.5; cursor: wait; }
+        .tool-btn { padding: 0 15px; background: #444; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: nowrap; transition: 0.2s; }
+        .tool-btn:hover { background: #666; }
+        .tool-btn.processing { background: var(--pro); color: #000; cursor: wait; }
 
         .radio-group { display: flex; gap: 10px; background: #000; padding: 5px; border-radius: 6px; border: 1px solid #444; height: 42px; box-sizing: border-box; }
         .radio-option { flex: 1; }
         .radio-option input[type="radio"] { display: none; }
-        .radio-option label { display: flex; align-items: center; justify-content: center; height: 100%; cursor: pointer; border-radius: 4px; margin: 0; color: #888; font-size: 13px; }
+        .radio-option label { display: flex; align-items: center; justify-content: center; height: 100%; cursor: pointer; border-radius: 4px; margin: 0; color: #888; transition: 0.2s; font-size: 13px; }
         .radio-option input[type="radio"]:checked + label { background: var(--neon); color: #000; font-weight: bold; }
 
         .shot-size-group { display: flex; gap: 5px; background: #000; padding: 5px; border-radius: 8px; border: 1px solid #444; }
         .size-option { flex: 1; }
         .size-option input[type="radio"] { display: none; }
-        .size-option label { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; cursor: pointer; border-radius: 6px; color: #888; font-size: 12px; }
-        .size-option input[type="radio"]:checked + label { background: var(--neon); color: #000; font-weight: bold; }
+        .size-option label { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; cursor: pointer; border-radius: 6px; color: #888; transition: 0.2s; font-size: 12px; gap: 4px; }
+        .size-option label span.icon { font-size: 18px; }
+        .size-option input[type="radio"]:checked + label { background: var(--neon); color: #000; font-weight: bold; box-shadow: 0 0 10px var(--neon); }
 
-        .checkbox-wrapper { display: flex; align-items: center; background: #2a2a2a; padding: 10px; border-radius: 6px; border: 1px solid #444; cursor: pointer; height: 42px; box-sizing: border-box; }
+        .checkbox-wrapper { display: flex; align-items: center; background: #2a2a2a; padding: 10px; border-radius: 6px; border: 1px solid #444; cursor: pointer; height: 42px; box-sizing: border-box; transition: 0.3s; }
+        .checkbox-wrapper:hover { border-color: var(--neon); }
         input[type="checkbox"] { width: 18px; height: 18px; margin-right: 10px; accent-color: var(--neon); cursor: pointer; }
-        .chk-label { margin: 0; color: #fff; font-weight: bold; font-size: 13px; }
+        .chk-label { margin: 0; cursor: pointer; color: #fff; font-weight: bold; font-size: 13px; }
 
         .grid-header { grid-column: span 6; text-align: center; color: var(--neon); font-size: 12px; margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold; opacity: 0.7; }
         .camera-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; background: #000; padding: 20px; border-radius: 12px; border: 1px solid #333; }
-        button.shot-btn { padding: 18px 5px; background: var(--btn-bg); color: #aaa; border: 1px solid #444; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        button.shot-btn.active { background: var(--neon) !important; color: #000 !important; border-color: #fff !important; box-shadow: 0 0 15px var(--neon); }
+        
+        button.shot-btn { padding: 18px 5px; background: var(--btn-bg); color: #aaa; border: 1px solid #444; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 13px; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        button.shot-btn:hover { background: #444; color: #fff; transform: translateY(-2px); }
+        button.shot-btn.center { border-color: var(--neon); color: #fff; background: #223333; }
+        button.shot-btn.active { background: var(--neon) !important; color: #000 !important; border-color: #fff !important; box-shadow: 0 0 15px var(--neon); transform: translateY(-2px); }
+        .icon { font-size: 20px; }
 
         .output-section { margin-top: 25px; background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid #333; }
         textarea { width: 100%; height: 120px; background: #000; color: var(--neon); border: 1px solid #333; padding: 15px; font-family: 'Consolas', monospace; font-size: 13px; margin-top: 10px; box-sizing: border-box; }
-        .copy-btn { width: 100%; padding: 15px; margin-top: 10px; background: #333; color: #fff; border: 1px solid var(--neon); border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .copy-btn { width: 100%; padding: 15px; margin-top: 10px; background: #333; color: #fff; border: 1px solid var(--neon); border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .copy-btn:hover { background: var(--neon); color: #000; }
         .copy-msg { color: var(--neon); font-size: 14px; text-align: right; height: 20px; margin-top: 5px; opacity: 0; transition: opacity 0.5s; }
+        
+        /* API 섹션 수정: 모델 선택기 추가 */
+        .api-section { background: #2a2a2a; padding: 15px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .api-row { display: flex; align-items: center; gap: 10px; }
+        .api-section input { border: none; background: #222; padding: 8px; color: var(--neon); font-family: monospace; border-radius: 4px; flex-grow: 1; }
+        .api-section select { width: auto; background: #222; border: 1px solid #555; color: #fff; padding: 8px; }
     </style>
 </head>
-<body onload="initApp()">
+<body onload="setLanguage('en'); loadApiKey();">
 
     <div class="header-container">
         <a class="header-title-box" href="https://www.youtube.com/@countingstars-k5t" target="_blank">
             <img src="logo_caountingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v4.8</h1>
-                <span class="sub-title">Counting Stars Official Tool (API Connect)</span>
+                <h1>SMITHY DIRECTOR STUDIO v4.9</h1>
+                <span class="sub-title">Counting Stars Official Tool (Gemini Selector)</span>
             </div>
         </a>
 
         <div class="top-controls">
-            <div class="api-settings">
-                <span style="font-size:10px; color:#888;">Gemini API:</span>
-                <input type="password" id="geminiKey" class="api-input" placeholder="Enter Google API Key here...">
-                <button class="lang-btn" onclick="saveApiKey()" style="padding:4px 8px;">Save</button>
-            </div>
-            
             <div class="lang-switcher">
                 <button class="lang-btn" onclick="setLanguage('ko')">🇰🇷 KR</button>
                 <button class="lang-btn" onclick="setLanguage('en')">🇺🇸 EN</button>
                 <button class="lang-btn" onclick="setLanguage('jp')">🇯🇵 JP</button>
             </div>
             <div class="link-group">
+                <span class="cta-text" data-lang="cta_text">✨ 구독&좋아요는 큰 힘이 됩니다!</span>
                 <a href="Smithy_Guide_v3.3_Final.html" target="_blank" class="nav-btn" data-lang="btn_guide">📖 가이드북</a>
-                <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="nav-btn" style="border-color: #ff4d4d;" data-lang="btn_channel">📺 채널</a>
+                <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="nav-btn" style="border-color: #ff4d4d;" data-lang="btn_channel">📺 공식 채널</a>
             </div>
         </div>
     </div>
 
     <div class="settings-panel">
         <div class="full-width">
+             <div class="api-section">
+                <div class="api-row">
+                    <span style="font-size:12px; font-weight:bold; width: 100px;">🔑 GEMINI KEY:</span>
+                    <input type="password" id="apiKeyInput" placeholder="AIzaSy..." onchange="saveApiKey()">
+                </div>
+                <div class="api-row">
+                    <span style="font-size:12px; font-weight:bold; width: 100px;">🛠️ 번역 모델:</span>
+                    <select id="transModel">
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (추천: 빠름)</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (고성능)</option>
+                        <option value="gemini-1.0-pro">Gemini 1.0 Pro (구버전 호환용)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="full-width">
             <label data-lang="char_label">1. 캐릭터 묘사 (Character)</label>
             <div class="input-group">
                 <input type="text" id="charDesc" data-placeholder="char_ph">
-                <button class="tool-btn" id="transBtn" onclick="runAiTranslate()" data-lang="trans_btn">🌐 AI 지능 번역</button>
+                <button class="tool-btn" onclick="translateText('charDesc')" data-lang="trans_btn">🌐 번역 (KO->EN)</button>
             </div>
         </div>
 
@@ -135,18 +161,36 @@
         <div class="full-width">
             <label style="color:var(--neon)" data-lang="dist_label">4. 카메라 거리 (Shot Distance)</label>
             <div class="shot-size-group">
-                <div class="size-option"><input type="radio" id="s_ecu" name="shotSize" value="ecu"><label for="s_ecu">👁️ ECU</label></div>
-                <div class="size-option"><input type="radio" id="s_cu" name="shotSize" value="cu"><label for="s_cu">👤 CU</label></div>
-                <div class="size-option"><input type="radio" id="s_ms" name="shotSize" value="ms" checked><label for="s_ms">👕 MS</label></div>
-                <div class="size-option"><input type="radio" id="s_fs" name="shotSize" value="fs"><label for="s_fs">🧍 FS</label></div>
-                <div class="size-option"><input type="radio" id="s_ws" name="shotSize" value="ws"><label for="s_ws">🏔️ WS</label></div>
+                <div class="size-option">
+                    <input type="radio" id="s_ecu" name="shotSize" value="ecu">
+                    <label for="s_ecu"><span class="icon">👁️</span><span data-lang="dist_ecu">초근접</span></label>
+                </div>
+                <div class="size-option">
+                    <input type="radio" id="s_cu" name="shotSize" value="cu">
+                    <label for="s_cu"><span class="icon">👤</span><span data-lang="dist_cu">얼굴</span></label>
+                </div>
+                <div class="size-option">
+                    <input type="radio" id="s_ms" name="shotSize" value="ms" checked>
+                    <label for="s_ms"><span class="icon">👕</span><span data-lang="dist_ms">상반신</span></label>
+                </div>
+                <div class="size-option">
+                    <input type="radio" id="s_fs" name="shotSize" value="fs">
+                    <label for="s_fs"><span class="icon">🧍</span><span data-lang="dist_fs">전신</span></label>
+                </div>
+                <div class="size-option">
+                    <input type="radio" id="s_ws" name="shotSize" value="ws">
+                    <label for="s_ws"><span class="icon">🏔️</span><span data-lang="dist_ws">원경</span></label>
+                </div>
             </div>
         </div>
         
         <div class="full-width bg-group" style="display: flex; gap: 15px; align-items: flex-end;">
             <div style="flex-grow: 1;">
                 <label data-lang="bg_label">5. 배경 묘사 (Background)</label>
-                <input type="text" id="bgDesc" data-placeholder="bg_ph">
+                <div class="input-group">
+                    <input type="text" id="bgDesc" data-placeholder="bg_ph">
+                    <button class="tool-btn" onclick="translateText('bgDesc')" data-lang="trans_btn">🌐 번역 (KO->EN)</button>
+                </div>
             </div>
             <div style="flex-basis: 250px;">
                 <label class="checkbox-wrapper">
@@ -156,90 +200,279 @@
             </div>
         </div>
 
-        <div class="full-width">
+        <div class="full-width" style="border-top: 1px solid #333; margin-top: 10px; padding-top: 15px;">
             <label style="color: var(--neon);" data-lang="model_label">🤖 6. 타겟 AI 모델 (Target Model)</label>
             <select id="aiModel" onchange="updateOptions()">
-                <option value="mj">Midjourney / Niji 6</option>
-                <option value="nano">🍌 NanoBanana</option>
-                <option value="nano_pro">🍌 NanoBanana Pro</option>
-                <option value="natural">Grok / ChatGPT / DALL-E 3</option>
-                <option value="sd">Stable Diffusion</option>
+                <option value="mj">Midjourney / Niji 6 (Recommended)</option>
+                <option value="nano">🍌 NanoBanana (Keywords)</option>
+                <option value="nano_pro">🍌 NanoBanana Pro (Flux/Sentence)</option>
+                <option value="natural">Grok / ChatGPT / DALL-E 3 (Natural)</option>
+                <option value="sd">Stable Diffusion / WebUI (Tags)</option>
             </select>
         </div>
 
         <div style="display: flex; gap: 20px;">
-            <div style="flex:1;"><label data-lang="iw_label">이미지 가중치</label><select id="iw"><option value="2">2.0</option><option value="1">1.0</option></select></div>
-            <div style="flex:1;"><label data-lang="ar_label">화면 비율</label><select id="ar"><option value="3:2">3:2</option><option value="9:16">9:16</option></select></div>
+            <div style="flex:1;">
+                <label id="iwLabel" data-lang="iw_label">이미지 가중치 (--iw)</label>
+                <select id="iw">
+                    <option value="2">2.0 (Max)</option>
+                    <option value="1.5">1.5 (High)</option>
+                    <option value="1">1.0 (Medium)</option>
+                </select>
+            </div>
+            <div style="flex:1;">
+                <label id="arLabel" data-lang="ar_label">화면 비율 (--ar)</label>
+                <select id="ar">
+                    <option value="3:2">3:2 (Standard)</option>
+                    <option value="16:9">16:9 (Cinematic)</option>
+                    <option value="9:16">9:16 (Shorts/Reels)</option>
+                    <option value="2.39:1">2.39:1 (Movie)</option>
+                </select>
+            </div>
         </div>
     </div>
 
-    <div class="grid-header">--- CAMERA GRID ---</div>
+    <div class="grid-header">--- LOW ANGLE (앙각) ---</div>
     <div class="camera-grid">
-        <button class="shot-btn" onclick="gen('Eye', 'Front', this)">⏺️ Front</button>
-        </div>
+        <button class="shot-btn" onclick="gen('Low', 'FarLeft', this)"><span class="icon">↖️</span><span data-lang="btn_side">L.Side</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Left45', this)"><span class="icon">↖️</span><span data-lang="btn_45">L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('Low', 'Front', this)"><span class="icon">⬆️</span><span data-lang="btn_front">Front</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Right45', this)"><span class="icon">↗️</span><span data-lang="btn_45">R.45°</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'FarRight', this)"><span class="icon">↗️</span><span data-lang="btn_side">R.Side</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
+    </div>
+
+    <div class="grid-header">--- EYE LEVEL (눈높이) ---</div>
+    <div class="camera-grid">
+        <button class="shot-btn" onclick="gen('Eye', 'FarLeft', this)"><span class="icon">⬅️</span><span data-lang="btn_side">L.Side</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Left45', this)"><span class="icon">⬅️</span><span data-lang="btn_45">L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('Eye', 'Front', this)"><span class="icon">⏺️</span><span data-lang="btn_front">Front</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Right45', this)"><span class="icon">➡️</span><span data-lang="btn_45">R.45°</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'FarRight', this)"><span class="icon">➡️</span><span data-lang="btn_side">R.Side</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
+    </div>
+
+    <div class="grid-header">--- HIGH ANGLE (부감) ---</div>
+    <div class="camera-grid">
+        <button class="shot-btn" onclick="gen('High', 'FarLeft', this)"><span class="icon">↙️</span><span data-lang="btn_side">L.Side</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Left45', this)"><span class="icon">↙️</span><span data-lang="btn_45">L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('High', 'Front', this)"><span class="icon">⬇️</span><span data-lang="btn_front">Front</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Right45', this)"><span class="icon">↘️</span><span data-lang="btn_45">R.45°</span></button>
+        <button class="shot-btn" onclick="gen('High', 'FarRight', this)"><span class="icon">↘️</span><span data-lang="btn_side">R.Side</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
+    </div>
 
     <div class="output-section">
-        <label data-lang="result_label">Result Prompt</label>
-        <textarea id="resultPrompt" readonly></textarea>
-        <button class="copy-btn" onclick="manualCopy()" data-lang="copy_btn">📋 Copy Prompt</button>
-        <div id="copyMsg" class="copy-msg">✨ Copied!</div>
+        <label data-lang="result_label">생성된 프롬프트 (Result Prompt)</label>
+        <textarea id="resultPrompt" readonly onclick="this.select()"></textarea>
+        <button class="copy-btn" onclick="manualCopy()" data-lang="copy_btn">📋 프롬프트 복사하기</button>
+        <div id="copyMsg" class="copy-msg" data-lang="copy_msg">✨ 클립보드에 복사되었습니다! Ctrl+V 하세요.</div>
     </div>
 
     <script>
-        // --- 1. API 기능 추가 (New) ---
+        const translations = {
+            ko: { char_label: "1. 캐릭터 묘사 (Character)", char_ph: "예: 12세 한국 소녀 웅지... (비워두면 원본 이미지 사용)", trans_btn: "🌐 번역 (KO->EN)", count_label: "2. 인원 수", focus_lock_label: "3. 구도 중심 & 수평 고정", focus_face: "🎯 얼굴 고정", focus_scene: "🌐 화면 중심", horizon_lock: "🔒 수평 고정", dist_label: "4. 카메라 거리 (Shot Distance)", dist_ecu: "초근접<br>(눈/입)", dist_cu: "얼굴<br>(Face)", dist_ms: "상반신<br>(Waist)", dist_fs: "전신<br>(Full Body)", dist_ws: "원경<br>(Wide)", bg_label: "5. 배경 묘사 (Background)", bg_ph: "예: 사이버펑크 도시... (비워두면 원본 배경 사용)", white_bg: "⬜ 화이트 스튜디오", model_label: "🤖 6. 타겟 AI 모델 (Target Model)", iw_label: "이미지 가중치 (--iw)", ar_label: "화면 비율 (--ar)", btn_side: "측면", btn_45: "45도", btn_front: "정면", btn_back: "후면", result_label: "생성된 프롬프트 (Result Prompt)", copy_btn: "📋 프롬프트 복사하기", copy_msg: "✨ 복사되었습니다! Ctrl+V 하세요.", cta_text: "✨ 구독&좋아요는 큰 힘이 됩니다!", btn_guide: "📖 가이드북", btn_channel: "📺 공식 채널" },
+            en: { char_label: "1. Character Description", char_ph: "Ex: 12yo Korean girl... (Leave empty for source image)", trans_btn: "🌐 Translate", count_label: "2. Subject Count", focus_lock_label: "3. Focus & Horizon", focus_face: "🎯 Face Focus", focus_scene: "🌐 Scene Focus", horizon_lock: "🔒 Lock Horizon", dist_label: "4. Shot Distance", dist_ecu: "Extreme<br>Close-up", dist_cu: "Close-up<br>(Face)", dist_ms: "Waist<br>Shot", dist_fs: "Full Body<br>Shot", dist_ws: "Wide<br>Shot", bg_label: "5. Background Description", bg_ph: "Ex: Cyberpunk city... (Leave empty for source bg)", white_bg: "⬜ White Studio", model_label: "🤖 6. Target AI Model", iw_label: "Image Weight (--iw)", ar_label: "Aspect Ratio (--ar)", btn_side: "Side", btn_45: "45°", btn_front: "Front", btn_back: "Back", result_label: "Result Prompt (English Output)", copy_btn: "📋 Copy Prompt", copy_msg: "✨ Copied to clipboard!", cta_text: "✨ Subscribe & Like helps a lot!", btn_guide: "📖 Guidebook", btn_channel: "📺 Official Channel" },
+            jp: { char_label: "1. キャラクター描写", char_ph: "例: 12歳の少女... (空欄で元画像を使用)", trans_btn: "🌐 翻訳", count_label: "2. 人数", focus_lock_label: "3. 構図の中心 & 水平固定", focus_face: "🎯 顔に固定", focus_scene: "🌐 画面中心", horizon_lock: "🔒 水平固定", dist_label: "4. カメラ距離 (Shot Distance)", dist_ecu: "超接写<br>(目/口)", dist_cu: "アップ<br>(顔)", dist_ms: "バ스트<br>アップ", dist_fs: "全身<br>(Full Body)", dist_ws: "遠景<br>(Wide)", bg_label: "5. 背景描写 (Background)", bg_ph: "例: サイバーパンクな街... (空欄で元背景を使用)", white_bg: "⬜ 白背景 (スタジオ)", model_label: "🤖 6. AIモデル選択", iw_label: "画像の重み (--iw)", ar_label: "画面比率 (--ar)", btn_side: "側面", btn_45: "45度", btn_front: "正面", btn_back: "背面", result_label: "生成されたプロンプト (英語)", copy_btn: "📋 コピーする", copy_msg: "✨ コピーしました！", cta_text: "✨ チャンネル登録と高評価は大きな力になります！", btn_guide: "📖 ガ이드북", btn_channel: "📺 公式チャンネル" }
+        };
+
+        function setLanguage(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`.lang-btn[onclick="setLanguage('${lang}')"]`).forEach(btn => btn.classList.add('active'));
+            const data = translations[lang];
+            document.querySelectorAll('[data-lang]').forEach(el => { const key = el.getAttribute('data-lang'); if (data[key]) el.innerHTML = data[key]; });
+            document.querySelectorAll('[data-placeholder]').forEach(el => { const key = el.getAttribute('data-placeholder'); if (data[key]) el.placeholder = data[key]; });
+        }
+
+        document.addEventListener('keydown', function(e) { if ([123, 73, 67, 74, 85, 83].includes(e.keyCode) && (e.ctrlKey || e.keyCode == 123)) { e.preventDefault(); return false; } });
+        
+        // --- GOOGLE GEMINI API LOGIC (UPGRADED: Model Selector) ---
         function saveApiKey() {
-            const key = document.getElementById('geminiKey').value;
-            localStorage.setItem('smithy_gemini_key', key);
-            alert('API Key Saved Safely!');
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if(key) localStorage.setItem('smithy_gemini_key', key);
+        }
+        function loadApiKey() {
+            const key = localStorage.getItem('smithy_gemini_key');
+            if(key) document.getElementById('apiKeyInput').value = key;
         }
 
-        function initApp() {
-            const savedKey = localStorage.getItem('smithy_gemini_key');
-            if (savedKey) document.getElementById('geminiKey').value = savedKey;
-            setLanguage('ko');
-        }
+        async function translateText(targetId) {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            const modelName = document.getElementById('transModel').value; // 모델 선택값 가져오기
+            const inputElem = document.getElementById(targetId);
+            const text = inputElem.value;
+            
+            if (!apiKey) { alert("⚠️ 구글 Gemini API 키를 먼저 입력하세요 (맨 위)"); return; }
+            if (!text) { alert("내용을 입력하세요"); return; }
 
-        async function runAiTranslate() {
-            const apiKey = document.getElementById('geminiKey').value;
-            const text = document.getElementById('charDesc').value;
-            if (!apiKey) return alert('Please enter Google API Key first!');
-            if (!text) return alert('Please enter description in Korean.');
-
-            const btn = document.getElementById('transBtn');
+            const btn = document.querySelector(`button[onclick="translateText('${targetId}')"]`);
+            const originalText = btn.innerText;
+            btn.innerText = "⏳...";
+            btn.classList.add('processing');
             btn.disabled = true;
-            btn.innerText = '⏳ AI Thinking...';
 
             try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                // 모델에 따라 URL 자동 변경
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+                
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Translate this Korean to English art prompt for Midjourney. Just output the English text: "${text}"` }] }]
+                        contents: [{
+                            parts: [{
+                                text: `Translate the following text to English for image prompting. Keep it concise, descriptive, and use comma-separated keywords if applicable. Text to translate: "${text}"`
+                            }]
+                        }]
                     })
                 });
+
                 const data = await response.json();
-                const translated = data.candidates[0].content.parts[0].text.trim();
-                document.getElementById('charDesc').value = translated;
+                
+                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                    inputElem.value = data.candidates[0].content.parts[0].text.trim();
+                } else if (data.error) {
+                    alert("Google Error: " + data.error.message + "\n\n💡 팁: '번역 모델'을 다른 걸로 바꿔보세요!");
+                } else {
+                    alert("Translation failed (Unknown response)");
+                }
+
             } catch (e) {
-                alert('API Error. Please check your Key.');
-            } finally {
-                btn.disabled = false;
-                btn.innerText = '🌐 AI 지능 번역';
+                alert("Network Error: " + e.message);
             }
+            
+            btn.innerText = originalText;
+            btn.classList.remove('processing');
+            btn.disabled = false;
+        }
+        // -----------------------------------------
+
+        function updateOptions() {
+            const model = document.getElementById('aiModel').value;
+            const h1 = document.querySelector('h1');
+            const header = document.querySelector('.header-container');
+            let color = '#00ffcc'; 
+            if (model === 'nano') color = 'var(--banana)'; else if (model === 'nano_pro') color = 'var(--pro)';
+            h1.style.color = color; header.style.borderBottomColor = color;
+            document.querySelectorAll('.shot-btn.active').forEach(btn => { btn.style.backgroundColor = color; btn.style.boxShadow = `0 0 15px ${color}`; });
+            document.documentElement.style.setProperty('--neon', color);
         }
 
-        // --- 2. v4.8 정통 로직 (Original) ---
-        const translations = { ko: { /* 상단과 동일 */ }, en: { /* 상단과 동일 */ } };
-        function setLanguage(lang) { /* ... */ }
-        function updateOptions() { /* ... */ }
         function gen(elevation, angle, btn) {
-            // ... v4.8의 정밀 조립 로직 (위에 제공해주신 것과 동일하게 작동)
+            if (btn) { document.querySelectorAll('.shot-btn').forEach(b => { b.classList.remove('active'); b.style.backgroundColor = ""; b.style.boxShadow = ""; b.style.color = ""; b.style.borderColor = ""; }); btn.classList.add('active'); }
+
+            const model = document.getElementById('aiModel').value;
+            let desc = document.getElementById('charDesc').value.trim();
+            const subCount = document.getElementById('subCount').value;
+            const focusType = document.querySelector('input[name="focusType"]:checked').value;
+            const shotSizeVal = document.querySelector('input[name="shotSize"]:checked').value;
+            const isHorizonLocked = document.getElementById('horizonLock').checked;
+            let bgInput = document.getElementById('bgDesc').value.trim();
+            const isWhiteMode = document.getElementById('whiteBg').checked;
+            const iw = document.getElementById('iw').value;
+            const ar = document.getElementById('ar').value;
+
+            if(desc === "") desc = "Subject"; 
+            desc = desc.replace(/,\s*$/, "");
+
+            let shotKeyword = ""; 
+            if (shotSizeVal === 'ecu') shotKeyword = "**Extreme Close-up Shot**";
+            else if (shotSizeVal === 'cu') shotKeyword = "**Close-up Shot**";
+            else if (shotSizeVal === 'ms') shotKeyword = "**Medium Shot (Waist-up)**";
+            else if (shotSizeVal === 'fs') shotKeyword = "**Full Body Shot**";
+            else if (shotSizeVal === 'ws') shotKeyword = "**Extreme Wide Shot**";
+
+            let focusDesc = (focusType === 'face') ? "Sharp focus on eyes and face, blurred background" : "Deep depth of field, everything in focus";
+            let mainSubject = (subCount === "1") ? `of ${desc}` : `Group photo of ${subCount} people, ${desc}`;
+
+            let bgPrompt = "";
+            if (isWhiteMode) bgPrompt = "Solid White Background";
+            else if (bgInput !== "") bgPrompt = `${bgInput}`;
+
+            let angleText = "";
+            let gazeText = "";
+            
+            // 🔴 High Angle 전용 로직 (Vertical Anchor 주입)
+            const isHigh = elevation === 'High';
+            const stabilityAnchor = isHigh ? "Strictly vertical orientation, upright posture, the floor is positioned at the bottom of the frame" : "";
+
+            if (angle === 'Front') {
+                angleText = isHigh ? "View looking at the subject's face from a high top-down angle" : "Camera at 6 o'clock position"; 
+                gazeText = (focusType === 'scene') ? "Not looking at camera, natural candid gaze" : "Looking at camera"; 
+            } else if (angle === 'Left45') {
+                angleText = isHigh ? "Camera positioned high above focusing on subject's left cheek and shoulder" : "Camera angle from 7:30 o'clock position"; 
+                gazeText = "Looking away from camera, gaze directed to the side";
+            } else if (angle === 'Right45') {
+                angleText = isHigh ? "Camera positioned high above focusing on subject's right cheek and shoulder" : "Camera angle from 4:30 o'clock position"; 
+                gazeText = "Looking away from camera, gaze directed to the side";
+            } else if (angle === 'FarLeft') {
+                angleText = isHigh ? "High angle side view looking at the subject's left profile and ear" : "Camera angle from 9 o'clock position"; 
+                gazeText = "Not looking at camera, Profile gaze";
+            } else if (angle === 'FarRight') {
+                angleText = isHigh ? "High angle side view looking at the subject's right profile and ear" : "Camera angle from 3 o'clock position"; 
+                gazeText = "Not looking at camera, Profile gaze";
+            } else if (angle === 'Back') {
+                angleText = isHigh ? "High angle view from directly behind the subject's head, looking down at shoulders" : "Camera angle from 12 o'clock position"; 
+                gazeText = "No face visible, facing away from camera, looking at the background, rear view, back of head";
+            }
+
+            let poseConstraint = isHorizonLocked ? "**🔴 CRITICAL: Group formation aligned relative to horizon.**" : "";
+            let headConstraint = (elevation === 'Low' && (angle === 'Left45' || angle === 'Right45')) ? "**🔴 CRITICAL: Keep chin level, do not tilt head back.**" : "";
+
+            let anglePrefix = "";
+            let camPosDesc = ""; 
+            if (elevation === 'High') { 
+                anglePrefix = "STEEP HIGH ANGLE (Top-down view)"; 
+                camPosDesc = "Camera is high above looking down with a fixed top-down perspective"; 
+            }
+            else if (elevation === 'Eye') { 
+                anglePrefix = "EYE-LEVEL SHOT"; 
+                camPosDesc = "Camera placed at subject's eye level"; 
+            }
+            else if (elevation === 'Low') { 
+                anglePrefix = "EXTREME LOW ANGLE (Worm's-eye view)"; 
+                camPosDesc = "Camera placed on the ground looking up"; 
+            }
+
+            let finalPrompt = "";
+
+            if (model === 'mj') {
+                let parts = [`**${anglePrefix}**`, `${shotKeyword} ${mainSubject}`, `${camPosDesc}`, `${angleText}`, gazeText];
+                if (stabilityAnchor) parts.push(stabilityAnchor);
+                if (headConstraint) parts.push(headConstraint);
+                parts.push(focusDesc);
+                if (bgPrompt) parts.push(bgPrompt);
+                if (poseConstraint) parts.push(poseConstraint);
+                parts.push("High fidelity, 8k");
+                finalPrompt = `${parts.join(". ")}. --ar ${ar} --iw ${iw} --style raw`;
+            } 
+            else if (model === 'nano_pro') {
+                let parts = [anglePrefix, `${shotKeyword} of ${desc}`, camPosDesc, angleText, stabilityAnchor, gazeText, headConstraint, bgPrompt ? `Background is ${bgPrompt}` : "", poseConstraint, "Hyper-realistic, 8k resolution, cinematic lighting, highly detailed"];
+                finalPrompt = `${parts.filter(p => p !== "").join(". ")} --ar ${ar}`;
+            }
+            else if (model === 'natural') {
+                let parts = [anglePrefix, `Shot: ${shotKeyword}`, `Subject: ${desc}`, `Angle: ${angleText}`, stabilityAnchor, `Gaze: ${gazeText}`, bgPrompt ? `Background: ${bgPrompt}` : "", "Photorealistic"];
+                finalPrompt = `${parts.filter(p => p !== "").join(". ")} --ar ${ar}`;
+            }
+            else {
+                let parts = ["(masterpiece)", anglePrefix.toLowerCase(), shotKeyword, desc, angleText, stabilityAnchor, gazeText, bgPrompt, "8k resolution"];
+                finalPrompt = `${parts.filter(p => p !== "").join(", ")} --ar ${ar}`;
+            }
+
             const output = document.getElementById('resultPrompt');
-            output.value = "Generated Prompt based on v4.8 logic..."; 
-            manualCopy();
+            output.value = finalPrompt;
+            manualCopy(); 
         }
-        function manualCopy() { /* ... */ }
+
+        function manualCopy() {
+            const output = document.getElementById('resultPrompt');
+            if(output.value === "") return;
+            output.select();
+            document.execCommand('copy');
+            const msg = document.getElementById('copyMsg');
+            msg.style.opacity = 1;
+            setTimeout(() => { msg.style.opacity = 0; }, 2000);
+        }
     </script>
 </body>
 </html>
