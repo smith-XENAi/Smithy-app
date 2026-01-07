@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smithy Director Studio v3.3 User Manual</title>
+    <style>
+        /* 기본 스타일 (Black & Gold Premium) */
+        :root { --primary: #000080; --accent: #00ffcc; --bg: #000000; --text: #e0e0e0; --gold: #DAA520; --box-bg: #1e1e1e; --warn: #ff4d4d; }
+        body { margin: 0; padding: 0; font-family: 'Pretendard', 'Segoe UI', 'Meiryo', sans-serif; line-height: 1.7; color: var(--text); background-color: var(--bg); }
+        .container { max-width: 800px; margin: 0 auto; background: #121212; box-shadow: 0 0 40px rgba(0, 255, 204, 0.05); min-height: 100vh; }
+        
+        /* 네비게이션 */
+        .lang-nav { background: #000; padding: 15px; text-align: right; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
+        .lang-btn { background: #222; color: #888; border: 1px solid #333; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; margin-left: 5px; transition: 0.3s; }
+        .lang-btn:hover { color: #fff; border-color: var(--accent); }
+        .lang-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+
+        /* 페이지 레이아웃 */
+        .page { padding: 50px; border-bottom: 1px solid #222; }
+        
+        /* 텍스트 스타일 */
+        h1 { font-size: 2.5em; color: var(--accent); margin-bottom: 10px; line-height: 1.2; text-shadow: 0 0 15px rgba(0,255,204,0.2); }
+        h2 { color: #fff; border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 50px; font-size: 1.8em; }
+        h3 { color: var(--gold); margin-top: 30px; margin-bottom: 10px; font-size: 1.3em; }
+        
+        /* 기본 P 태그 스타일 (한국어 최적화: 단어 단위 끊기) */
+        p { margin-bottom: 15px; color: #ccc; word-break: keep-all; word-wrap: break-word; }
+        
+        ul, ol { padding-left: 20px; color: #ccc; margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+        strong { color: #fff; }
+
+        /* 🔴 일본어 전용 줄바꿈 수정 (Japanese Line Break Fix) */
+        #content-jp p, #content-jp li { word-break: break-all; }
+
+        /* 박스 디자인 */
+        .box { background: var(--box-bg); padding: 25px; border-radius: 8px; border-left: 4px solid var(--accent); margin: 25px 0; }
+        .box-warn { background: #1a0505; padding: 25px; border-radius: 8px; border-left: 4px solid var(--warn); margin: 25px 0; }
+        .tag { display: inline-block; background: #333; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; font-weight: bold; margin-right: 5px; border: 1px solid #444; }
+
+        /* 표지 */
+        .cover { text-align: center; padding-top: 120px; padding-bottom: 120px; background-color: #000000; }
+        .logo-link { display: inline-block; cursor: pointer; transition: transform 0.3s ease; }
+        .logo-link:hover { transform: scale(1.05); }
+        .version { display: inline-block; background: #222; border: 1px solid #444; color: var(--accent); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; margin-top: 15px; font-weight: bold; }
+
+        /* 버튼 */
+        .btn-cta { display: inline-block; background: #cc0000; color: white; text-decoration: none; padding: 15px 40px; border-radius: 50px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 20px rgba(204,0,0,0.4); transition: transform 0.2s; }
+        .btn-cta:hover { transform: translateY(-3px); }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="lang-nav">
+        <button class="lang-btn active" onclick="setLang('ko')">🇰🇷 한국어</button>
+        <button class="lang-btn" onclick="setLang('en')">🇺🇸 English</button>
+        <button class="lang-btn" onclick="setLang('jp')">🇯🇵 日本語</button>
+    </div>
+
+    <div class="container">
+        
+        <div id="content-ko" class="content-section active">
+            <div class="page cover">
+                <a href="Smithy_index.html" target="_blank" class="logo-link" title="Smithy 도구 실행하기">
+                    <img src="logo_caountingstars.jpg" alt="Start Smithy Tool" style="width: 250px; height: auto;" onerror="this.outerHTML='<span style=\'font-size:5em; display:block; margin-bottom:30px; color:var(--accent);\'>📸</span>'">
+                </a>
+                <h1>SMITHY<br>DIRECTOR STUDIO</h1>
+                <p>AI 캐릭터 디렉팅 & 프롬프트 엔지니어링 솔루션</p>
+                <span class="version">Version 3.3 (Artist's Philosophy)</span>
+                <p style="margin-top: 30px; font-size: 0.9em; color: #666;">Developed by Counting Stars</p>
+            </div>
+
+            <div class="page">
+                <h2>1. 왜 이 도구가 필요한가?</h2>
+                <div class="box">
+                    <strong>"골격과 비율이 캐릭터의 영혼을 결정합니다."</strong>
+                </div>
+                <p>이 도구는 단순한 프롬프트 생성기가 아닙니다. <strong>과거 전통 애니메이션 제작 현장의 작화 노하우</strong>를 AI 생성 과정에 이식하기 위해 개발되었습니다.</p>
+                <p>그림을 그릴 때 우리는 구도를 먼저 잡고 얼굴을 묘사합니다. 또한, <strong>캐릭터의 얼굴 방향이 곧 그 캐릭터의 동세와 움직임을 결정짓습니다.</strong> 스미시는 이러한 예술적 원리를 코드로 구현하여, AI가 아티스트의 의도를 정확히 따르도록 설계되었습니다.</p>
+
+                <h2>2. 🔥 핵심 가이드: 머그샷(Mugshot)의 중요성</h2>
+                <p>일관성 있는 캐릭터를 원하신다면, 가장 먼저 해야 할 일은 <strong>완벽한 '머그샷(설정화)'</strong>을 만드는 것입니다. 골격과 이목구비의 정확한 비율 데이터가 확보되어야 캐릭터의 인지율(Character Identity)이 유지됩니다.</p>
+                
+                <h3>✅ 머그샷 촬영 추천 세팅</h3>
+                <ul>
+                    <li><strong>거리:</strong> <span class="tag">얼굴(Close-up)</span> 또는 <span class="tag">상반신(Waist)</span></li>
+                    <li><strong>구도:</strong> <span class="tag">🌐 화면 중심 (Scene Focus)</span> <br><small>※ 머그샷은 자료용이므로 배경 흐림 없이 이목구비와 윤곽선이 선명하게 나와야 합니다.</small></li>
+                    <li><strong>촬영:</strong> <strong>[EYE LEVEL]</strong>에서 <strong>정면</strong>과 <strong>측면</strong>을 반드시 확보하세요.</li>
+                </ul>
+
+                <h3>✅ 장면 연출(Scene) 추천 세팅</h3>
+                <ul>
+                    <li><strong>구도:</strong> <span class="tag">🎯 얼굴 고정 (Face Focus)</span> <br><small>※ 실제 작품 연출 시에는 인물에 초점을 맞추고 배경을 날려(Bokeh) 캐릭터를 강조하는 것이 좋습니다.</small></li>
+                </ul>
+            </div>
+
+            <div class="page">
+                <h2>3. v3.3 업데이트 및 주의사항</h2>
+                
+                <h3>지속적인 진화 (Continuous Update)</h3>
+                <p>스미시는 멈춰있지 않습니다. AI 모델의 변화에 맞춰 프롬프트 로직을 <strong>계속해서 강화하고 업데이트</strong>하고 있습니다. 현재 버전은 화면 회전 방지와 시선 처리가 대폭 개선된 v3.3입니다.</p>
+
+                <div class="box-warn">
+                    <h3 style="color: #ff4d4d; margin-top: 0;">⚠️ 이것은 마법이 아닌 '도구'입니다.</h3>
+                    <p>AI 기술은 아직 완벽하지 않으며, 일관성을 유지하기 위해 끊임없이 학습 중인 과도기에 있습니다. 스미시는 그 혼란 속에서 방향을 잡아주는 <strong>가장 강력한 도구</strong>이지만, 100% 성공을 보장하진 않습니다.</p>
+                    <p><strong>💡 팁: 한 번에 원하는 결과가 나오지 않을 수 있습니다.</strong><br>
+                    이럴 땐 당황하지 말고 <strong>'다시 생성(Re-roll)'</strong> 버튼을 눌러주세요. 프롬프트는 정확하더라도 AI의 랜덤성(Seed) 때문에 결과가 튈 수 있습니다. 보통 2~3회 시도 내에 의도한 결과가 나옵니다.</p>
+                </div>
+            </div>
+
+            <div class="page" style="text-align: center;">
+                <h2>💬 소통과 피드백</h2>
+                <p>사용 중 <strong>오류가 발생하거나 개선 아이디어</strong>가 있다면 주저 말고 <strong>유튜브 영상 댓글</strong>로 남겨주세요.<br>여러분의 피드백이 스미시를 더 완벽하게 만듭니다.</p>
+                
+                <hr style="border: 0; border-top: 1px dashed #444; margin: 40px 0;">
+
+                <div class="box-gold" style="text-align: left;">
+                    <h3 style="margin-top: 0; color: var(--gold);">🧬 캐릭터 JSON DNA 패키지 (Coming Soon)</h3>
+                    <p>캐릭터의 골격 정보를 데이터화하여 일관성을 종결지을 솔루션.<br><strong>2026.01.15 공개 예정</strong></p>
+                </div>
+
+                <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="btn-cta">
+                    📺 Counting Stars 채널 바로가기
+                </a>
+            </div>
+        </div>
+
+        <div id="content-en" class="content-section">
+            <div class="page cover">
+                <a href="Smithy_index.html" target="_blank" class="logo-link">
+                    <img src="logo_caountingstars.jpg" alt="Start Smithy Tool" style="width: 250px; height: auto;" onerror="this.outerHTML='<span style=\'font-size:5em; display:block; margin-bottom:30px; color:var(--accent);\'>📸</span>'">
+                </a>
+                <h1>SMITHY<br>DIRECTOR STUDIO</h1>
+                <p>AI Prompt Engineering Solution</p>
+                <span class="version">Version 3.3 (Artist's Philosophy)</span>
+                <p style="margin-top: 30px; font-size: 0.9em; color: #666;">Developed by Counting Stars</p>
+            </div>
+
+            <div class="page">
+                <h2>1. Why is this tool necessary?</h2>
+                <div class="box">
+                    <strong>"Bone structure and proportions determine the soul of a character."</strong>
+                </div>
+                <p>This tool was created to apply <strong>traditional animation production know-how</strong> to AI generation. In drawing, we determine composition first, then detail the face. Furthermore, <strong>the direction of the face determines the character's movement and dynamics.</strong> Smithy embodies these artistic principles in code.</p>
+
+                <h2>2. 🔥 Core Guide: The Importance of Mugshots</h2>
+                <p>To achieve consistency, you must first create a perfect <strong>'Mugshot (Model Sheet).'</strong> Securing precise data on bone structure and facial features creates the "Character Identity."</p>
+                
+                <h3>✅ Recommended Settings for Mugshots</h3>
+                <ul>
+                    <li><strong>Focus:</strong> <span class="tag">🌐 Scene Focus (Deep Depth of Field)</span> <br><small>* Mugshots need to be clear everywhere (hair, ears, neck) without blur for reference.</small></li>
+                </ul>
+
+                <h3>✅ Recommended Settings for Scenes</h3>
+                <ul>
+                    <li><strong>Focus:</strong> <span class="tag">🎯 Face Focus (Bokeh)</span> <br><small>* For cinematic storytelling, emphasize the character by blurring the background.</small></li>
+                </ul>
+            </div>
+
+            <div class="page">
+                <h2>3. Reality Check & Tips</h2>
+                <div class="box-warn">
+                    <h3 style="color: #ff4d4d; margin-top: 0;">⚠️ A Tool, Not Magic.</h3>
+                    <p>AI technology is still evolving. Smithy is the <strong>best available navigator</strong> in this chaos, but it doesn't guarantee 100% success on the first try.</p>
+                    <p><strong>💡 Tip: If it fails, Re-roll.</strong><br>
+                    Even with the perfect prompt, AI randomness happens. Please generate 2-3 times to get the intended result.</p>
+                </div>
+                <p>We are <strong>continuously updating</strong> the logic to strengthen prompts. Please leave <strong>comments on YouTube</strong> if you find errors.</p>
+            </div>
+
+            <div class="page" style="text-align: center;">
+                <h2>🎁 Coming Soon</h2>
+                <div class="box-gold" style="text-align: left;">
+                    <h3 style="margin-top: 0; color: var(--gold);">🧬 Character JSON DNA Package</h3>
+                    <p>The ultimate solution for character consistency. <strong>Releasing on 2026.01.15</strong></p>
+                </div>
+                <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="btn-cta">
+                    📺 Subscribe to Counting Stars
+                </a>
+            </div>
+        </div>
+
+        <div id="content-jp" class="content-section">
+            <div class="page cover">
+                <a href="Smithy_index.html" target="_blank" class="logo-link">
+                    <img src="logo_caountingstars.jpg" alt="Start Smithy Tool" style="width: 250px; height: auto;" onerror="this.outerHTML='<span style=\'font-size:5em; display:block; margin-bottom:30px; color:var(--accent);\'>📸</span>'">
+                </a>
+                <h1>SMITHY<br>DIRECTOR STUDIO</h1>
+                <p>AIプロンプトエンジニアリング・ソリューション</p>
+                <span class="version">Version 3.3 (Artist's Philosophy)</span>
+                <p style="margin-top: 30px; font-size: 0.9em; color: #666;">Developed by Counting Stars</p>
+            </div>
+
+            <div class="page">
+                <h2>1. なぜこのツールが必要なのか？</h2>
+                <div class="box">
+                    <strong>「骨格と比率がキャラクターの魂を決定します。」</strong>
+                </div>
+                <p>このツールは、<strong>過去のアニメーション制作現場のノウハウ</strong>をAI生成に適用するために開発されました。絵を描く際、構図を決めてから顔を描写します。そして、<strong>顔の向きがキャラクターの動き（動勢）を決定づけます。</strong> Smithyはこの芸術的原理をコードで具現化しました。</p>
+
+                <h2>2. 🔥 コアガイド：マグショットの重要性</h2>
+                <p>一貫性を保つためには、まず完璧な<strong>「マグショット（設定画）」</strong>を作成する必要があります。骨格と目鼻立ちの正確な比率データがあってこそ、キャラクターの認知率（Identity）が維持されます。</p>
+                
+                <h3>✅ マグショット推奨設定</h3>
+                <ul>
+                    <li><strong>フォーカス:</strong> <span class="tag">🌐 画面中心 (Scene Focus)</span> <br><small>※ 資料用なので、背景ぼかし無しで全体を鮮明にする必要があります。</small></li>
+                </ul>
+
+                <h3>✅ シーン演出推奨設定</h3>
+                <ul>
+                    <li><strong>フォーカス:</strong> <span class="tag">🎯 顔に固定 (Face Focus)</span> <br><small>※ 作品として演出する際は、人物にピントを合わせ背景をぼかす（ボケ味）のが効果的です。</small></li>
+                </ul>
+            </div>
+
+            <div class="page">
+                <h2>3. 注意事項とヒント</h2>
+                <div class="box-warn">
+                    <h3 style="color: #ff4d4d; margin-top: 0;">⚠️ 魔法ではなく「道具」です。</h3>
+                    <p>AI技術はまだ完璧ではありません。Smithyはその過渡期において方向を示す<strong>最強のナビゲーター</strong>ですが、一発での成功を保証するものではありません。</p>
+                    <p><strong>💡 ヒント：失敗しても「再生成（リロール）」してください。</strong><br>
+                    プロンプトが正確でも、AIのランダム性により結果がブレることがあります。2〜3回試行すれば意図した結果が得られます。</p>
+                </div>
+                <p>プロンプトは<strong>継続的にアップデート</strong>されています。エラーや質問は<strong>YouTubeのコメント</strong>で知らせてください。</p>
+            </div>
+
+            <div class="page" style="text-align: center;">
+                <h2>🎁 次回アップデート予告</h2>
+                <div class="box-gold" style="text-align: left;">
+                    <h3 style="margin-top: 0; color: var(--gold);">🧬 キャラクターDNAパッケージ (公開予定)</h3>
+                    <p>一貫性のあるAIキャラクターのための最も確実なソリューション。<strong>2026.01.15 公開予定</strong></p>
+                </div>
+                <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="btn-cta">
+                    📺 Counting Stars チャンネル登録
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function setLang(lang) {
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('content-' + lang).classList.add('active');
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
