@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v5.3 (Final Complete)</title>
+    <title>Smithy Director Studio v5.4 (Front Lock Fixed)</title>
     <style>
-        /* v5.3 디자인: 다국어/링크 버튼 복구 + 깔끔한 블랙 테마 */
+        /* v5.4: 정면(Front) 앵글 로직 강화 + 기존 디자인 유지 */
         :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
         body { background-color: var(--bg); color: #e0e0e0; font-family: 'Pretendard', 'Segoe UI', sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto; line-height: 1.5; user-select: none; }
         
@@ -15,7 +15,6 @@
         h1 { color: var(--neon); margin: 0; font-size: 24px; text-shadow: 0 0 10px rgba(0,255,204,0.2); }
         .sub-title { font-size: 13px; color: #888; letter-spacing: 1px; }
 
-        /* 복구된 상단 컨트롤 패널 */
         .top-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         .lang-switcher { display: flex; gap: 5px; }
         .lang-btn { background: #222; border: 1px solid #444; color: #888; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; }
@@ -80,8 +79,8 @@
         <a class="header-title-box" href="https://www.youtube.com/@countingstarts-k5t" target="_blank">
             <img src="logo_countingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v5.3</h1>
-                <span class="sub-title">Counting Stars Official Tool (Multi-Lang + Auto-Trans)</span>
+                <h1>SMITHY DIRECTOR STUDIO v5.4</h1>
+                <span class="sub-title">Counting Stars Official Tool (Front-Lock Edition)</span>
             </div>
         </a>
 
@@ -250,11 +249,10 @@
         // 키보드 보안
         document.addEventListener('keydown', function(e) { if ([123, 73, 67, 74, 85, 83].includes(e.keyCode) && (e.ctrlKey || e.keyCode == 123)) { e.preventDefault(); return false; } });
 
-        // --- 다국어 지원 로직 (복구됨) ---
         const translations = {
             ko: { char_label: "1. 캐릭터 묘사", char_ph: "예: 12세 한국 소녀 웅지 (한글로 입력하면 알아서 번역됩니다)", count_label: "2. 인원 수", focus_lock_label: "3. 구도 중심 & 수평 고정", focus_face: "🎯 얼굴 고정", focus_scene: "🌐 화면 중심", horizon_lock: "🔒 수평 고정", dist_label: "4. 카메라 거리 (Shot Distance)", dist_ecu: "초근접<br>(눈/입)", dist_cu: "얼굴<br>(Face)", dist_ms: "상반신<br>(Waist)", dist_fs: "전신<br>(Full Body)", dist_ws: "원경<br>(Wide)", bg_label: "5. 배경 묘사", bg_ph: "예: 사이버펑크 도시 야경 (한글 입력 OK)", white_bg: "⬜ 화이트 스튜디오", model_label: "🤖 6. 타겟 AI 모델 (Target Model)", iw_label: "이미지 가중치 (--iw)", ar_label: "화면 비율 (--ar)", btn_side: "측면", btn_45: "45도", btn_front: "정면", btn_back: "후면", result_label: "생성된 프롬프트 (Result Prompt)", copy_btn: "📋 프롬프트 복사하기", copy_msg: "✨ 복사되었습니다! Ctrl+V 하세요.", cta_text: "✨ 구독&좋아요는 큰 힘이 됩니다!", btn_guide: "📖 가이드북", btn_channel: "📺 공식 채널" },
             en: { char_label: "1. Character Description", char_ph: "Ex: 12yo Korean girl... (Auto-trans from Korean supported)", count_label: "2. Subject Count", focus_lock_label: "3. Focus & Horizon", focus_face: "🎯 Face Focus", focus_scene: "🌐 Scene Focus", horizon_lock: "🔒 Lock Horizon", dist_label: "4. Shot Distance", dist_ecu: "Extreme<br>Close-up", dist_cu: "Close-up<br>(Face)", dist_ms: "Waist<br>Shot", dist_fs: "Full Body<br>Shot", dist_ws: "Wide<br>Shot", bg_label: "5. Background Description", bg_ph: "Ex: Cyberpunk city... (Auto-trans supported)", white_bg: "⬜ White Studio", model_label: "🤖 6. Target AI Model", iw_label: "Image Weight (--iw)", ar_label: "Aspect Ratio (--ar)", btn_side: "Side", btn_45: "45°", btn_front: "Front", btn_back: "Back", result_label: "Result Prompt (English Output)", copy_btn: "📋 Copy Prompt", copy_msg: "✨ Copied to clipboard!", cta_text: "✨ Subscribe & Like helps a lot!", btn_guide: "📖 Guidebook", btn_channel: "📺 Official Channel" },
-            jp: { char_label: "1. キャラクター描写", char_ph: "例: 12歳の少女... (韓国語からの自動翻訳対応)", count_label: "2. 人数", focus_lock_label: "3. 構図の中心 & 水平固定", focus_face: "🎯 顔に固定", focus_scene: "🌐 画面中心", horizon_lock: "🔒 水平固定", dist_label: "4. カメラ距離 (Shot Distance)", dist_ecu: "超接写<br>(目/口)", dist_cu: "アップ<br>(顔)", dist_ms: "バスト<br>アップ", dist_fs: "全身<br>(Full Body)", dist_ws: "遠景<br>(Wide)", bg_label: "5. 背景描写", bg_ph: "例: サイバーパンクな街... (自動翻訳対応)", white_bg: "⬜ 白背景 (スタジオ)", model_label: "🤖 6. AIモデル選択", iw_label: "画像の重み (--iw)", ar_label: "画面比率 (--ar)", btn_side: "側面", btn_45: "45度", btn_front: "正面", btn_back: "背面", result_label: "生成されたプロンプト (英語)", copy_btn: "📋 コピーする", copy_msg: "✨ コピーしました！", cta_text: "✨ チャンネル登録と高評価は大きな力になります！", btn_guide: "📖 ガイド북", btn_channel: "📺 公式チャンネル" }
+            jp: { char_label: "1. キャラクター描写", char_ph: "例: 12歳の少女... (韓国語からの自動翻訳対応)", count_label: "2. 人数", focus_lock_label: "3. 構図の中心 & 水平固定", focus_face: "🎯 顔に固定", focus_scene: "🌐 画面中心", horizon_lock: "🔒 水平固定", dist_label: "4. カメラ距離 (Shot Distance)", dist_ecu: "超接写<br>(目/口)", dist_cu: "アップ<br>(顔)", dist_ms: "バ스트<br>アップ", dist_fs: "全身<br>(Full Body)", dist_ws: "遠景<br>(Wide)", bg_label: "5. 背景描写", bg_ph: "例: サイバーパンクな街... (自動翻訳対応)", white_bg: "⬜ 白背景 (スタジオ)", model_label: "🤖 6. AIモデル選択", iw_label: "画像の重み (--iw)", ar_label: "画面比率 (--ar)", btn_side: "側面", btn_45: "45度", btn_front: "正面", btn_back: "背面", result_label: "生成されたプロンプト (英語)", copy_btn: "📋 コピーする", copy_msg: "✨ コピーしました！", cta_text: "✨ チャンネル登録と高評価は大きな力になります！", btn_guide: "📖 ガ이드북", btn_channel: "📺 公式チャンネル" }
         };
 
         function setLanguage(lang) {
@@ -276,30 +274,25 @@
             document.documentElement.style.setProperty('--neon', color);
         }
 
-        // --- 🚀 진짜 무료 자동번역 로직 (MyMemory API) ---
         async function autoTranslate(text) {
-            if (!text || !/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text)) return text; // 한글 없으면 패스
-
+            if (!text || !/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text)) return text; 
             try {
-                // MyMemory 무료 API 사용 (일일 제한 있음, 하지만 개인용으론 충분)
                 const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ko|en`;
                 const response = await fetch(url);
                 const data = await response.json();
-                
                 if (data.responseData && data.responseData.translatedText) {
                     return data.responseData.translatedText;
                 } else {
-                    return text; // 실패시 원본 반환
+                    return text; 
                 }
             } catch (e) {
                 console.error("번역 실패:", e);
-                return text; // 에러시 원본 반환
+                return text; 
             }
         }
 
         async function gen(elevation, angle, btn) {
             try {
-                // 1. UI 시각 효과 (로딩중)
                 const originalBtnText = btn ? btn.innerHTML : "";
                 if (btn) {
                      document.querySelectorAll('.shot-btn').forEach(b => { b.classList.remove('active'); b.style.backgroundColor = ""; b.style.boxShadow = ""; b.style.color = ""; b.style.borderColor = ""; }); 
@@ -307,23 +300,19 @@
                      btn.innerHTML = "⏳..";
                 }
 
-                // 2. 입력값 가져오기
                 let descRaw = document.getElementById('charDesc').value.trim();
                 let bgRaw = document.getElementById('bgDesc').value.trim();
 
-                // 3. 번역 수행 (비동기)
                 if (descRaw && /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(descRaw)) document.getElementById('transStatus1').style.display = 'inline';
                 if (bgRaw && /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(bgRaw)) document.getElementById('transStatus2').style.display = 'inline';
 
                 let desc = await autoTranslate(descRaw);
                 let bgInput = await autoTranslate(bgRaw);
 
-                // 번역 완료 후 UI 복구
                 document.getElementById('transStatus1').style.display = 'none';
                 document.getElementById('transStatus2').style.display = 'none';
                 if (btn) btn.innerHTML = originalBtnText;
 
-                // 4. 나머지 프롬프트 조립 로직 (기존과 동일)
                 let subCount = document.getElementById('subCount').value;
                 const focusTypeElem = document.querySelector('input[name="focusType"]:checked');
                 const focusType = focusTypeElem ? focusTypeElem.value : 'face';
@@ -359,10 +348,17 @@
                 const isHigh = elevation === 'High';
                 const stabilityAnchor = isHigh ? "Strictly vertical orientation, upright posture, the floor is positioned at the bottom of the frame" : "";
 
+                // === 🔴 정면(Front) 고정 로직 수정 (핵심) ===
                 if (angle === 'Front') {
-                    angleText = isHigh ? "View looking at the subject's face from a high top-down angle" : "Camera at 6 o'clock position"; 
-                    gazeText = (focusType === 'scene') ? "Not looking at camera, natural candid gaze" : "Looking at camera"; 
-                } else if (angle === 'Left45') {
+                    angleText = isHigh ? 
+                        "Direct top-down view facing the subject's face centrally" : 
+                        "Direct Frontal View, Symmetrical Composition, Body and face facing straight forward"; 
+                    
+                    gazeText = (focusType === 'scene') ? 
+                        "Not looking at camera, natural candid gaze" : 
+                        "Intense direct eye contact, looking straight into the camera lens"; 
+                } 
+                else if (angle === 'Left45') {
                     angleText = isHigh ? "Camera positioned high above focusing on subject's left cheek and shoulder" : "Camera angle from 7:30 o'clock position"; 
                     gazeText = "Looking away from camera, gaze directed to the side";
                 } else if (angle === 'Right45') {
@@ -380,6 +376,10 @@
                 }
 
                 let poseConstraint = isHorizonLocked ? "**🔴 CRITICAL: Group formation aligned relative to horizon.**" : "";
+                
+                // Front 앵글일 때 대칭형 자세 강제 (Symmetrical pose added)
+                let frontConstraint = (angle === 'Front' && !isHigh) ? "**Symmetrical pose, No body rotation, shoulders square to camera**" : "";
+
                 let headConstraint = (elevation === 'Low' && (angle === 'Left45' || angle === 'Right45')) ? "**🔴 CRITICAL: Keep chin level, do not tilt head back.**" : "";
 
                 let anglePrefix = "";
@@ -394,6 +394,7 @@
                     let parts = [`**${anglePrefix}**`, `${shotKeyword} ${mainSubject}`, `${camPosDesc}`, `${angleText}`, gazeText];
                     if (stabilityAnchor) parts.push(stabilityAnchor);
                     if (headConstraint) parts.push(headConstraint);
+                    if (frontConstraint) parts.push(frontConstraint); // 정면 고정 추가
                     parts.push(focusDesc);
                     if (bgPrompt) parts.push(bgPrompt);
                     if (poseConstraint) parts.push(poseConstraint);
@@ -401,15 +402,15 @@
                     finalPrompt = `${parts.join(". ")}. --ar ${ar} --iw ${iw} --style raw`;
                 } 
                 else if (model === 'nano_pro') {
-                    let parts = [anglePrefix, `${shotKeyword} of ${desc}`, camPosDesc, angleText, stabilityAnchor, gazeText, headConstraint, bgPrompt ? `Background is ${bgPrompt}` : "", poseConstraint, "Hyper-realistic, 8k resolution, cinematic lighting, highly detailed"];
+                    let parts = [anglePrefix, `${shotKeyword} of ${desc}`, camPosDesc, angleText, stabilityAnchor, gazeText, headConstraint, frontConstraint, bgPrompt ? `Background is ${bgPrompt}` : "", poseConstraint, "Hyper-realistic, 8k resolution, cinematic lighting, highly detailed"];
                     finalPrompt = `${parts.filter(p => p !== "").join(". ")} --ar ${ar}`;
                 }
                 else if (model === 'natural') {
-                    let parts = [anglePrefix, `Shot: ${shotKeyword}`, `Subject: ${desc}`, `Angle: ${angleText}`, stabilityAnchor, `Gaze: ${gazeText}`, bgPrompt ? `Background: ${bgPrompt}` : "", "Photorealistic"];
+                    let parts = [anglePrefix, `Shot: ${shotKeyword}`, `Subject: ${desc}`, `Angle: ${angleText}`, stabilityAnchor, `Gaze: ${gazeText}`, frontConstraint, bgPrompt ? `Background: ${bgPrompt}` : "", "Photorealistic"];
                     finalPrompt = `${parts.filter(p => p !== "").join(". ")} --ar ${ar}`;
                 }
                 else {
-                    let parts = ["(masterpiece)", anglePrefix.toLowerCase(), shotKeyword, desc, angleText, stabilityAnchor, gazeText, bgPrompt, "8k resolution"];
+                    let parts = ["(masterpiece)", anglePrefix.toLowerCase(), shotKeyword, desc, angleText, stabilityAnchor, gazeText, frontConstraint, bgPrompt, "8k resolution"];
                     finalPrompt = `${parts.filter(p => p !== "").join(", ")} --ar ${ar}`;
                 }
 
