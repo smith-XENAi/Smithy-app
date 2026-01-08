@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v5.2 (Auto-Trans Restored)</title>
+    <title>Smithy Director Studio v5.3 (Final Complete)</title>
     <style>
-        /* v5.2 디자인: 깔끔하고 직관적으로 */
-        :root { --neon: #00ffcc; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
+        /* v5.3 디자인: 다국어/링크 버튼 복구 + 깔끔한 블랙 테마 */
+        :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
         body { background-color: var(--bg); color: #e0e0e0; font-family: 'Pretendard', 'Segoe UI', sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto; line-height: 1.5; user-select: none; }
         
-        .header-container { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--neon); padding-bottom: 20px; margin-bottom: 30px; }
+        .header-container { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--neon); padding-bottom: 20px; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
         .header-title-box { display: flex; align-items: center; gap: 15px; cursor: pointer; text-decoration: none; }
-        .channel-logo { width: 80px; height: auto; border: none; }
+        .channel-logo { width: 90px; height: auto; border: none; object-fit: contain; }
         h1 { color: var(--neon); margin: 0; font-size: 24px; text-shadow: 0 0 10px rgba(0,255,204,0.2); }
         .sub-title { font-size: 13px; color: #888; letter-spacing: 1px; }
 
+        /* 복구된 상단 컨트롤 패널 */
         .top-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        .lang-switcher { display: flex; gap: 5px; }
+        .lang-btn { background: #222; border: 1px solid #444; color: #888; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; }
+        .lang-btn:hover { border-color: var(--neon); color: #fff; }
+        .lang-btn.active { background: var(--neon); color: #000; border-color: var(--neon); }
+
+        .link-group { display: flex; align-items: center; gap: 8px; }
+        .cta-text { font-size: 11px; color: var(--pro); font-weight: bold; animation: blink 2s infinite; margin-right: 5px; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .nav-btn { padding: 6px 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 20px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
-        .nav-btn:hover { border-color: var(--neon); background: #444; }
+        .nav-btn:hover { border-color: var(--neon); transform: translateY(-2px); background: #444; }
         
         .settings-panel { background: var(--panel); padding: 25px; border-radius: 12px; margin-bottom: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; box-shadow: 0 4px 15px rgba(255,255,255,0.05); }
         .full-width { grid-column: span 2; }
@@ -65,53 +74,62 @@
         @keyframes blink { 50% { opacity: 0.5; } }
     </style>
 </head>
-<body>
+<body onload="setLanguage('ko');">
 
     <div class="header-container">
-        <a class="header-title-box" href="https://www.youtube.com/@countingstars-k5t" target="_blank">
+        <a class="header-title-box" href="https://www.youtube.com/@countingstarts-k5t" target="_blank">
             <img src="logo_countingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v5.2</h1>
-                <span class="sub-title">Counting Stars Official Tool (Auto-Trans Restored)</span>
+                <h1>SMITHY DIRECTOR STUDIO v5.3</h1>
+                <span class="sub-title">Counting Stars Official Tool (Multi-Lang + Auto-Trans)</span>
             </div>
         </a>
 
         <div class="top-controls">
-            <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="nav-btn" style="border-color: #ff4d4d;">📺 공식 채널</a>
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLanguage('ko')">🇰🇷 KR</button>
+                <button class="lang-btn" onclick="setLanguage('en')">🇺🇸 EN</button>
+                <button class="lang-btn" onclick="setLanguage('jp')">🇯🇵 JP</button>
+            </div>
+            <div class="link-group">
+                <span class="cta-text" data-lang="cta_text">✨ 구독&좋아요는 큰 힘이 됩니다!</span>
+                <a href="Smithy_Guide_v3.3_Final.html" target="_blank" class="nav-btn" data-lang="btn_guide">📖 가이드북</a>
+                <a href="https://www.youtube.com/@countingstarts-k5t" target="_blank" class="nav-btn" style="border-color: #ff4d4d;" data-lang="btn_channel">📺 공식 채널</a>
+            </div>
         </div>
     </div>
 
     <div class="settings-panel">
         
         <div class="full-width">
-            <label>1. 캐릭터 묘사 <span id="transStatus1" class="loading-text">🔄 번역중...</span></label>
+            <label><span data-lang="char_label">1. 캐릭터 묘사</span> <span id="transStatus1" class="loading-text">🔄 Translating...</span></label>
             <div class="input-group">
-                <input type="text" id="charDesc" placeholder="예: 12세 한국 소녀 웅지 (한글로 입력하면 알아서 번역됩니다)">
+                <input type="text" id="charDesc" data-placeholder="char_ph">
             </div>
         </div>
 
         <div class="full-width" style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
             <div>
-                <label>2. 인원 수</label>
+                <label data-lang="count_label">2. 인원 수</label>
                 <input type="number" id="subCount" value="1" min="1" max="10">
             </div>
             <div>
-                <label>3. 구도 중심 & 수평 고정</label>
+                <label data-lang="focus_lock_label">3. 구도 중심 & 수평 고정</label>
                 <div style="display: flex; gap: 10px;">
                     <div class="radio-group" style="flex: 2;">
                         <div class="radio-option">
                             <input type="radio" id="focusFace" name="focusType" value="face" checked>
-                            <label for="focusFace">🎯 얼굴 고정</label>
+                            <label for="focusFace" data-lang="focus_face">🎯 얼굴 고정</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="focusScene" name="focusType" value="scene">
-                            <label for="focusScene">🌐 화면 중심</label>
+                            <label for="focusScene" data-lang="focus_scene">🌐 화면 중심</label>
                         </div>
                     </div>
                     <div style="flex: 1.5;">
                         <label class="checkbox-wrapper">
                             <input type="checkbox" id="horizonLock" checked>
-                            <span class="chk-label">🔒 수평 고정</span>
+                            <span class="chk-label" data-lang="horizon_lock">🔒 수평 고정</span>
                         </label>
                     </div>
                 </div>
@@ -119,48 +137,48 @@
         </div>
 
         <div class="full-width">
-            <label style="color:var(--neon)">4. 카메라 거리 (Shot Distance)</label>
+            <label style="color:var(--neon)" data-lang="dist_label">4. 카메라 거리 (Shot Distance)</label>
             <div class="shot-size-group">
                 <div class="size-option">
                     <input type="radio" id="s_ecu" name="shotSize" value="ecu">
-                    <label for="s_ecu"><span class="icon">👁️</span><span>초근접</span></label>
+                    <label for="s_ecu"><span class="icon">👁️</span><span data-lang="dist_ecu">초근접</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_cu" name="shotSize" value="cu">
-                    <label for="s_cu"><span class="icon">👤</span><span>얼굴</span></label>
+                    <label for="s_cu"><span class="icon">👤</span><span data-lang="dist_cu">얼굴</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_ms" name="shotSize" value="ms" checked>
-                    <label for="s_ms"><span class="icon">👕</span><span>상반신</span></label>
+                    <label for="s_ms"><span class="icon">👕</span><span data-lang="dist_ms">상반신</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_fs" name="shotSize" value="fs">
-                    <label for="s_fs"><span class="icon">🧍</span><span>전신</span></label>
+                    <label for="s_fs"><span class="icon">🧍</span><span data-lang="dist_fs">전신</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_ws" name="shotSize" value="ws">
-                    <label for="s_ws"><span class="icon">🏔️</span><span>원경</span></label>
+                    <label for="s_ws"><span class="icon">🏔️</span><span data-lang="dist_ws">원경</span></label>
                 </div>
             </div>
         </div>
         
         <div class="full-width bg-group" style="display: flex; gap: 15px; align-items: flex-end;">
             <div style="flex-grow: 1;">
-                <label>5. 배경 묘사 <span id="transStatus2" class="loading-text">🔄 번역중...</span></label>
+                <label><span data-lang="bg_label">5. 배경 묘사</span> <span id="transStatus2" class="loading-text">🔄 Translating...</span></label>
                 <div class="input-group">
-                    <input type="text" id="bgDesc" placeholder="예: 사이버펑크 도시 야경 (한글 입력 OK)">
+                    <input type="text" id="bgDesc" data-placeholder="bg_ph">
                 </div>
             </div>
             <div style="flex-basis: 250px;">
                 <label class="checkbox-wrapper">
                     <input type="checkbox" id="whiteBg">
-                    <span class="chk-label">⬜ 화이트 스튜디오</span>
+                    <span class="chk-label" data-lang="white_bg">⬜ 화이트 스튜디오</span>
                 </label>
             </div>
         </div>
 
         <div class="full-width" style="border-top: 1px solid #333; margin-top: 10px; padding-top: 15px;">
-            <label style="color: var(--neon);">🤖 6. 타겟 AI 모델 (Target Model)</label>
+            <label style="color: var(--neon);" data-lang="model_label">🤖 6. 타겟 AI 모델 (Target Model)</label>
             <select id="aiModel" onchange="updateOptions()">
                 <option value="mj">Midjourney / Niji 6 (Recommended)</option>
                 <option value="nano">🍌 NanoBanana (Keywords)</option>
@@ -172,7 +190,7 @@
 
         <div style="display: flex; gap: 20px;">
             <div style="flex:1;">
-                <label id="iwLabel">이미지 가중치 (--iw)</label>
+                <label id="iwLabel" data-lang="iw_label">이미지 가중치 (--iw)</label>
                 <select id="iw">
                     <option value="2">2.0 (Max)</option>
                     <option value="1.5">1.5 (High)</option>
@@ -180,7 +198,7 @@
                 </select>
             </div>
             <div style="flex:1;">
-                <label id="arLabel">화면 비율 (--ar)</label>
+                <label id="arLabel" data-lang="ar_label">화면 비율 (--ar)</label>
                 <select id="ar">
                     <option value="3:2">3:2 (Standard)</option>
                     <option value="16:9">16:9 (Cinematic)</option>
@@ -193,44 +211,59 @@
 
     <div class="grid-header">--- LOW ANGLE (앙각) ---</div>
     <div class="camera-grid">
-        <button class="shot-btn" onclick="gen('Low', 'FarLeft', this)"><span class="icon">↖️</span><span>L.Side</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'Left45', this)"><span class="icon">↖️</span><span>L.45°</span></button>
-        <button class="shot-btn center" onclick="gen('Low', 'Front', this)"><span class="icon">⬆️</span><span>Front</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'Right45', this)"><span class="icon">↗️</span><span>R.45°</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'FarRight', this)"><span class="icon">↗️</span><span>R.Side</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'Back', this)"><span class="icon">🔙</span><span>Back</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'FarLeft', this)"><span class="icon">↖️</span><span data-lang="btn_side">L.Side</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Left45', this)"><span class="icon">↖️</span><span data-lang="btn_45">L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('Low', 'Front', this)"><span class="icon">⬆️</span><span data-lang="btn_front">Front</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Right45', this)"><span class="icon">↗️</span><span data-lang="btn_45">R.45°</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'FarRight', this)"><span class="icon">↗️</span><span data-lang="btn_side">R.Side</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
     </div>
 
     <div class="grid-header">--- EYE LEVEL (눈높이) ---</div>
     <div class="camera-grid">
-        <button class="shot-btn" onclick="gen('Eye', 'FarLeft', this)"><span class="icon">⬅️</span><span>L.Side</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'Left45', this)"><span class="icon">⬅️</span><span>L.45°</span></button>
-        <button class="shot-btn center" onclick="gen('Eye', 'Front', this)"><span class="icon">⏺️</span><span>Front</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'Right45', this)"><span class="icon">➡️</span><span>R.45°</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'FarRight', this)"><span class="icon">➡️</span><span>R.Side</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'Back', this)"><span class="icon">🔙</span><span>Back</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'FarLeft', this)"><span class="icon">⬅️</span><span data-lang="btn_side">L.Side</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Left45', this)"><span class="icon">⬅️</span><span data-lang="btn_45">L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('Eye', 'Front', this)"><span class="icon">⏺️</span><span data-lang="btn_front">Front</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Right45', this)"><span class="icon">➡️</span><span data-lang="btn_45">R.45°</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'FarRight', this)"><span class="icon">➡️</span><span data-lang="btn_side">R.Side</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
     </div>
 
     <div class="grid-header">--- HIGH ANGLE (부감) ---</div>
     <div class="camera-grid">
-        <button class="shot-btn" onclick="gen('High', 'FarLeft', this)"><span class="icon">↙️</span><span>L.Side</span></button>
-        <button class="shot-btn" onclick="gen('High', 'Left45', this)"><span class="icon">↙️</span><span>L.45°</span></button>
-        <button class="shot-btn center" onclick="gen('High', 'Front', this)"><span class="icon">⬇️</span><span>Front</span></button>
-        <button class="shot-btn" onclick="gen('High', 'Right45', this)"><span class="icon">↘️</span><span>R.45°</span></button>
-        <button class="shot-btn" onclick="gen('High', 'FarRight', this)"><span class="icon">↘️</span><span>R.Side</span></button>
-        <button class="shot-btn" onclick="gen('High', 'Back', this)"><span class="icon">🔙</span><span>Back</span></button>
+        <button class="shot-btn" onclick="gen('High', 'FarLeft', this)"><span class="icon">↙️</span><span data-lang="btn_side">L.Side</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Left45', this)"><span class="icon">↙️</span><span data-lang="btn_45">L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('High', 'Front', this)"><span class="icon">⬇️</span><span data-lang="btn_front">Front</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Right45', this)"><span class="icon">↘️</span><span data-lang="btn_45">R.45°</span></button>
+        <button class="shot-btn" onclick="gen('High', 'FarRight', this)"><span class="icon">↘️</span><span data-lang="btn_side">R.Side</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
     </div>
 
     <div class="output-section">
-        <label>생성된 프롬프트 (Result Prompt)</label>
+        <label data-lang="result_label">생성된 프롬프트 (Result Prompt)</label>
         <textarea id="resultPrompt" readonly onclick="this.select()"></textarea>
-        <button class="copy-btn" onclick="manualCopy()">📋 프롬프트 복사하기</button>
-        <div id="copyMsg" class="copy-msg">✨ 클립보드에 복사되었습니다! Ctrl+V 하세요.</div>
+        <button class="copy-btn" onclick="manualCopy()" data-lang="copy_btn">📋 프롬프트 복사하기</button>
+        <div id="copyMsg" class="copy-msg" data-lang="copy_msg">✨ 클립보드에 복사되었습니다! Ctrl+V 하세요.</div>
     </div>
 
     <script>
         // 키보드 보안
         document.addEventListener('keydown', function(e) { if ([123, 73, 67, 74, 85, 83].includes(e.keyCode) && (e.ctrlKey || e.keyCode == 123)) { e.preventDefault(); return false; } });
+
+        // --- 다국어 지원 로직 (복구됨) ---
+        const translations = {
+            ko: { char_label: "1. 캐릭터 묘사", char_ph: "예: 12세 한국 소녀 웅지 (한글로 입력하면 알아서 번역됩니다)", count_label: "2. 인원 수", focus_lock_label: "3. 구도 중심 & 수평 고정", focus_face: "🎯 얼굴 고정", focus_scene: "🌐 화면 중심", horizon_lock: "🔒 수평 고정", dist_label: "4. 카메라 거리 (Shot Distance)", dist_ecu: "초근접<br>(눈/입)", dist_cu: "얼굴<br>(Face)", dist_ms: "상반신<br>(Waist)", dist_fs: "전신<br>(Full Body)", dist_ws: "원경<br>(Wide)", bg_label: "5. 배경 묘사", bg_ph: "예: 사이버펑크 도시 야경 (한글 입력 OK)", white_bg: "⬜ 화이트 스튜디오", model_label: "🤖 6. 타겟 AI 모델 (Target Model)", iw_label: "이미지 가중치 (--iw)", ar_label: "화면 비율 (--ar)", btn_side: "측면", btn_45: "45도", btn_front: "정면", btn_back: "후면", result_label: "생성된 프롬프트 (Result Prompt)", copy_btn: "📋 프롬프트 복사하기", copy_msg: "✨ 복사되었습니다! Ctrl+V 하세요.", cta_text: "✨ 구독&좋아요는 큰 힘이 됩니다!", btn_guide: "📖 가이드북", btn_channel: "📺 공식 채널" },
+            en: { char_label: "1. Character Description", char_ph: "Ex: 12yo Korean girl... (Auto-trans from Korean supported)", count_label: "2. Subject Count", focus_lock_label: "3. Focus & Horizon", focus_face: "🎯 Face Focus", focus_scene: "🌐 Scene Focus", horizon_lock: "🔒 Lock Horizon", dist_label: "4. Shot Distance", dist_ecu: "Extreme<br>Close-up", dist_cu: "Close-up<br>(Face)", dist_ms: "Waist<br>Shot", dist_fs: "Full Body<br>Shot", dist_ws: "Wide<br>Shot", bg_label: "5. Background Description", bg_ph: "Ex: Cyberpunk city... (Auto-trans supported)", white_bg: "⬜ White Studio", model_label: "🤖 6. Target AI Model", iw_label: "Image Weight (--iw)", ar_label: "Aspect Ratio (--ar)", btn_side: "Side", btn_45: "45°", btn_front: "Front", btn_back: "Back", result_label: "Result Prompt (English Output)", copy_btn: "📋 Copy Prompt", copy_msg: "✨ Copied to clipboard!", cta_text: "✨ Subscribe & Like helps a lot!", btn_guide: "📖 Guidebook", btn_channel: "📺 Official Channel" },
+            jp: { char_label: "1. キャラクター描写", char_ph: "例: 12歳の少女... (韓国語からの自動翻訳対応)", count_label: "2. 人数", focus_lock_label: "3. 構図の中心 & 水平固定", focus_face: "🎯 顔に固定", focus_scene: "🌐 画面中心", horizon_lock: "🔒 水平固定", dist_label: "4. カメラ距離 (Shot Distance)", dist_ecu: "超接写<br>(目/口)", dist_cu: "アップ<br>(顔)", dist_ms: "バスト<br>アップ", dist_fs: "全身<br>(Full Body)", dist_ws: "遠景<br>(Wide)", bg_label: "5. 背景描写", bg_ph: "例: サイバーパンクな街... (自動翻訳対応)", white_bg: "⬜ 白背景 (スタジオ)", model_label: "🤖 6. AIモデル選択", iw_label: "画像の重み (--iw)", ar_label: "画面比率 (--ar)", btn_side: "側面", btn_45: "45度", btn_front: "正面", btn_back: "背面", result_label: "生成されたプロンプト (英語)", copy_btn: "📋 コピーする", copy_msg: "✨ コピーしました！", cta_text: "✨ チャンネル登録と高評価は大きな力になります！", btn_guide: "📖 ガイド북", btn_channel: "📺 公式チャンネル" }
+        };
+
+        function setLanguage(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`.lang-btn[onclick="setLanguage('${lang}')"]`).forEach(btn => btn.classList.add('active'));
+            const data = translations[lang];
+            document.querySelectorAll('[data-lang]').forEach(el => { const key = el.getAttribute('data-lang'); if (data[key]) el.innerHTML = data[key]; });
+            document.querySelectorAll('[data-placeholder]').forEach(el => { const key = el.getAttribute('data-placeholder'); if (data[key]) el.placeholder = data[key]; });
+        }
 
         function updateOptions() {
             const model = document.getElementById('aiModel').value;
