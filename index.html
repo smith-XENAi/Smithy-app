@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v4.9 (Hotfix)</title>
+    <title>Smithy Director Studio v5.0 (Auto-Trans)</title>
     <style>
-        /* v2.0 블랙 에디션 디자인 유지 */
+        /* v2.0 블랙 에디션 디자인 + v5.0 업데이트 */
         :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
         body { background-color: var(--bg); color: #e0e0e0; font-family: 'Pretendard', 'Segoe UI', sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto; line-height: 1.5; user-select: none; }
         
@@ -84,8 +84,8 @@
         <a class="header-title-box" href="https://www.youtube.com/@countingstars-k5t" target="_blank">
             <img src="logo_countingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v4.9</h1>
-                <span class="sub-title">Counting Stars Official Tool (Hotfix)</span>
+                <h1>SMITHY DIRECTOR STUDIO v5.0</h1>
+                <span class="sub-title">Auto-Translate Edition</span>
             </div>
         </a>
 
@@ -108,24 +108,22 @@
              <div class="api-section">
                 <div class="api-row">
                     <span style="font-size:12px; font-weight:bold; width: 100px;">🔑 GEMINI KEY:</span>
-                    <input type="password" id="apiKeyInput" placeholder="AIzaSy..." onchange="saveApiKey()">
+                    <input type="password" id="apiKeyInput" placeholder="AIzaSy... (필수: 자동번역용)" onchange="saveApiKey()">
                 </div>
                 <div class="api-row">
                     <span style="font-size:12px; font-weight:bold; width: 100px;">🛠️ 번역 모델:</span>
                     <select id="transModel">
-                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (추천: 빠름)</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (고성능)</option>
-                        <option value="gemini-1.0-pro">Gemini 1.0 Pro (구버전 호환용)</option>
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (매우 빠름)</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (정확함)</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <div class="full-width">
-            <label data-lang="char_label">1. 캐릭터 묘사 (Character)</label>
+            <label data-lang="char_label">1. 캐릭터 묘사 (Character - 한글 입력 가능!)</label>
             <div class="input-group">
                 <input type="text" id="charDesc" data-placeholder="char_ph">
-                <button class="tool-btn" onclick="translateText('charDesc')" data-lang="trans_btn">🌐 번역 (KO->EN)</button>
             </div>
         </div>
 
@@ -185,10 +183,9 @@
         
         <div class="full-width bg-group" style="display: flex; gap: 15px; align-items: flex-end;">
             <div style="flex-grow: 1;">
-                <label data-lang="bg_label">5. 배경 묘사 (Background)</label>
+                <label data-lang="bg_label">5. 배경 묘사 (Background - 한글 입력 가능!)</label>
                 <div class="input-group">
                     <input type="text" id="bgDesc" data-placeholder="bg_ph">
-                    <button class="tool-btn" onclick="translateText('bgDesc')" data-lang="trans_btn">🌐 번역 (KO->EN)</button>
                 </div>
             </div>
             <div style="flex-basis: 250px;">
@@ -270,9 +267,9 @@
 
     <script>
         const translations = {
-            ko: { char_label: "1. 캐릭터 묘사 (Character)", char_ph: "예: 12세 한국 소녀 웅지... (비워두면 원본 이미지 사용)", trans_btn: "🌐 번역 (KO->EN)", count_label: "2. 인원 수", focus_lock_label: "3. 구도 중심 & 수평 고정", focus_face: "🎯 얼굴 고정", focus_scene: "🌐 화면 중심", horizon_lock: "🔒 수평 고정", dist_label: "4. 카메라 거리 (Shot Distance)", dist_ecu: "초근접<br>(눈/입)", dist_cu: "얼굴<br>(Face)", dist_ms: "상반신<br>(Waist)", dist_fs: "전신<br>(Full Body)", dist_ws: "원경<br>(Wide)", bg_label: "5. 배경 묘사 (Background)", bg_ph: "예: 사이버펑크 도시... (비워두면 원본 배경 사용)", white_bg: "⬜ 화이트 스튜디오", model_label: "🤖 6. 타겟 AI 모델 (Target Model)", iw_label: "이미지 가중치 (--iw)", ar_label: "화면 비율 (--ar)", btn_side: "측면", btn_45: "45도", btn_front: "정면", btn_back: "후면", result_label: "생성된 프롬프트 (Result Prompt)", copy_btn: "📋 프롬프트 복사하기", copy_msg: "✨ 복사되었습니다! Ctrl+V 하세요.", cta_text: "✨ 구독&좋아요는 큰 힘이 됩니다!", btn_guide: "📖 가이드북", btn_channel: "📺 공식 채널" },
-            en: { char_label: "1. Character Description", char_ph: "Ex: 12yo Korean girl... (Leave empty for source image)", trans_btn: "🌐 Translate", count_label: "2. Subject Count", focus_lock_label: "3. Focus & Horizon", focus_face: "🎯 Face Focus", focus_scene: "🌐 Scene Focus", horizon_lock: "🔒 Lock Horizon", dist_label: "4. Shot Distance", dist_ecu: "Extreme<br>Close-up", dist_cu: "Close-up<br>(Face)", dist_ms: "Waist<br>Shot", dist_fs: "Full Body<br>Shot", dist_ws: "Wide<br>Shot", bg_label: "5. Background Description", bg_ph: "Ex: Cyberpunk city... (Leave empty for source bg)", white_bg: "⬜ White Studio", model_label: "🤖 6. Target AI Model", iw_label: "Image Weight (--iw)", ar_label: "Aspect Ratio (--ar)", btn_side: "Side", btn_45: "45°", btn_front: "Front", btn_back: "Back", result_label: "Result Prompt (English Output)", copy_btn: "📋 Copy Prompt", copy_msg: "✨ Copied to clipboard!", cta_text: "✨ Subscribe & Like helps a lot!", btn_guide: "📖 Guidebook", btn_channel: "📺 Official Channel" },
-            jp: { char_label: "1. キャラクター描写", char_ph: "例: 12歳の少女... (空欄で元画像を使用)", trans_btn: "🌐 翻訳", count_label: "2. 人数", focus_lock_label: "3. 構図の中心 & 水平固定", focus_face: "🎯 顔に固定", focus_scene: "🌐 画面中心", horizon_lock: "🔒 水平固定", dist_label: "4. カメラ距離 (Shot Distance)", dist_ecu: "超接写<br>(目/口)", dist_cu: "アップ<br>(顔)", dist_ms: "バ스트<br>アップ", dist_fs: "全身<br>(Full Body)", dist_ws: "遠景<br>(Wide)", bg_label: "5. 背景描写 (Background)", bg_ph: "例: サイバーパンクな街... (空欄で元背景を使用)", white_bg: "⬜ 白背景 (スタジオ)", model_label: "🤖 6. AIモデル選択", iw_label: "画像の重み (--iw)", ar_label: "画面比率 (--ar)", btn_side: "側面", btn_45: "45度", btn_front: "正面", btn_back: "背面", result_label: "生成されたプロンプト (英語)", copy_btn: "📋 コピーする", copy_msg: "✨ コピーしました！", cta_text: "✨ チャンネル登録と高評価は大きな力になります！", btn_guide: "📖 ガイド북", btn_channel: "📺 公式チャンネル" }
+            ko: { char_label: "1. 캐릭터 묘사 (한글 입력시 자동번역)", char_ph: "예: 12세 한국 소녀... (자동번역 됩니다)", count_label: "2. 인원 수", focus_lock_label: "3. 구도 중심 & 수평 고정", focus_face: "🎯 얼굴 고정", focus_scene: "🌐 화면 중심", horizon_lock: "🔒 수평 고정", dist_label: "4. 카메라 거리 (Shot Distance)", dist_ecu: "초근접<br>(눈/입)", dist_cu: "얼굴<br>(Face)", dist_ms: "상반신<br>(Waist)", dist_fs: "전신<br>(Full Body)", dist_ws: "원경<br>(Wide)", bg_label: "5. 배경 묘사 (한글 입력시 자동번역)", bg_ph: "예: 사이버펑크 도시... (자동번역 됩니다)", white_bg: "⬜ 화이트 스튜디오", model_label: "🤖 6. 타겟 AI 모델 (Target Model)", iw_label: "이미지 가중치 (--iw)", ar_label: "화면 비율 (--ar)", btn_side: "측면", btn_45: "45도", btn_front: "정면", btn_back: "후면", result_label: "생성된 프롬프트 (Result Prompt)", copy_btn: "📋 프롬프트 복사하기", copy_msg: "✨ 복사되었습니다! Ctrl+V 하세요.", cta_text: "✨ 구독&좋아요는 큰 힘이 됩니다!", btn_guide: "📖 가이드북", btn_channel: "📺 공식 채널" },
+            en: { char_label: "1. Character Description (Auto-Trans)", char_ph: "Ex: 12yo Korean girl...", count_label: "2. Subject Count", focus_lock_label: "3. Focus & Horizon", focus_face: "🎯 Face Focus", focus_scene: "🌐 Scene Focus", horizon_lock: "🔒 Lock Horizon", dist_label: "4. Shot Distance", dist_ecu: "Extreme<br>Close-up", dist_cu: "Close-up<br>(Face)", dist_ms: "Waist<br>Shot", dist_fs: "Full Body<br>Shot", dist_ws: "Wide<br>Shot", bg_label: "5. Background Description (Auto-Trans)", bg_ph: "Ex: Cyberpunk city...", white_bg: "⬜ White Studio", model_label: "🤖 6. Target AI Model", iw_label: "Image Weight (--iw)", ar_label: "Aspect Ratio (--ar)", btn_side: "Side", btn_45: "45°", btn_front: "Front", btn_back: "Back", result_label: "Result Prompt (English Output)", copy_btn: "📋 Copy Prompt", copy_msg: "✨ Copied to clipboard!", cta_text: "✨ Subscribe & Like helps a lot!", btn_guide: "📖 Guidebook", btn_channel: "📺 Official Channel" },
+            jp: { char_label: "1. キャラクター描写 (自動翻訳)", char_ph: "例: 12歳の少女... (自動翻訳)", count_label: "2. 人数", focus_lock_label: "3. 構図の中心 & 水平固定", focus_face: "🎯 顔に固定", focus_scene: "🌐 画面中心", horizon_lock: "🔒 水平固定", dist_label: "4. カメラ距離 (Shot Distance)", dist_ecu: "超接写<br>(目/口)", dist_cu: "アップ<br>(顔)", dist_ms: "バ스트<br>アップ", dist_fs: "全身<br>(Full Body)", dist_ws: "遠景<br>(Wide)", bg_label: "5. 背景描写 (自動翻訳)", bg_ph: "例: サイバーパンクな街... (自動翻訳)", white_bg: "⬜ 白背景 (スタジオ)", model_label: "🤖 6. AIモデル選択", iw_label: "画像の重み (--iw)", ar_label: "画面比率 (--ar)", btn_side: "側面", btn_45: "45度", btn_front: "正面", btn_back: "背面", result_label: "生成されたプロンプト (英語)", copy_btn: "📋 コピーする", copy_msg: "✨ コピーしました！", cta_text: "✨ チャンネル登録と高評価は大きな力になります！", btn_guide: "📖 ガ이드북", btn_channel: "📺 公式チャンネル" }
         };
 
         function setLanguage(lang) {
@@ -285,7 +282,6 @@
 
         document.addEventListener('keydown', function(e) { if ([123, 73, 67, 74, 85, 83].includes(e.keyCode) && (e.ctrlKey || e.keyCode == 123)) { e.preventDefault(); return false; } });
         
-        // --- GOOGLE GEMINI API LOGIC ---
         function saveApiKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
             if(key) localStorage.setItem('smithy_gemini_key', key);
@@ -295,20 +291,15 @@
             if(key) document.getElementById('apiKeyInput').value = key;
         }
 
-        async function translateText(targetId) {
+        // --- NEW AUTO TRANSLATOR ---
+        async function translateIfNeeded(text) {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
             const modelName = document.getElementById('transModel').value;
-            const inputElem = document.getElementById(targetId);
-            const text = inputElem.value;
             
-            if (!apiKey) { alert("⚠️ 구글 Gemini API 키를 먼저 입력하세요 (맨 위)"); return; }
-            if (!text) { alert("내용을 입력하세요"); return; }
-
-            const btn = document.querySelector(`button[onclick="translateText('${targetId}')"]`);
-            const originalText = btn.innerText;
-            btn.innerText = "⏳...";
-            btn.classList.add('processing');
-            btn.disabled = true;
+            // Check if text has Korean characters
+            const hasKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text);
+            
+            if (!apiKey || !text || !hasKorean) return text; // Skip if no key or no Korean
 
             try {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
@@ -318,28 +309,20 @@
                     body: JSON.stringify({
                         contents: [{
                             parts: [{
-                                text: `Translate the following text to English for image prompting. Keep it concise, descriptive, and use comma-separated keywords if applicable. Text to translate: "${text}"`
+                                text: `Translate to concise English descriptive keywords for AI image generation: "${text}"`
                             }]
                         }]
                     })
                 });
 
                 const data = await response.json();
-                
                 if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
-                    inputElem.value = data.candidates[0].content.parts[0].text.trim();
-                } else if (data.error) {
-                    alert("Google Error: " + data.error.message + "\n\n💡 팁: '번역 모델'을 다른 걸로 바꿔보세요!");
-                } else {
-                    alert("Translation failed (Unknown response)");
+                    return data.candidates[0].content.parts[0].text.trim();
                 }
             } catch (e) {
-                alert("Network Error: " + e.message);
+                console.error("Trans Error", e);
             }
-            
-            btn.innerText = originalText;
-            btn.classList.remove('processing');
-            btn.disabled = false;
+            return text; // Fallback to original
         }
 
         function updateOptions() {
@@ -353,30 +336,48 @@
             document.documentElement.style.setProperty('--neon', color);
         }
 
-        function gen(elevation, angle, btn) {
+        async function gen(elevation, angle, btn) {
             try {
-                // UI Update
-                if (btn) { document.querySelectorAll('.shot-btn').forEach(b => { b.classList.remove('active'); b.style.backgroundColor = ""; b.style.boxShadow = ""; b.style.color = ""; b.style.borderColor = ""; }); btn.classList.add('active'); }
+                // Visual Feedback
+                const originalBtnText = btn ? btn.innerHTML : "";
+                if (btn) {
+                     document.querySelectorAll('.shot-btn').forEach(b => { b.classList.remove('active'); b.style.backgroundColor = ""; b.style.boxShadow = ""; b.style.color = ""; b.style.borderColor = ""; }); 
+                     btn.classList.add('active'); 
+                     btn.innerHTML = "♻️..."; // Loading Icon
+                }
 
-                // Safe Value Retrieval
-                const model = document.getElementById('aiModel').value;
-                let desc = document.getElementById('charDesc').value.trim();
-                let subCount = document.getElementById('subCount').value;
+                // 1. Get Raw Values
+                const charInput = document.getElementById('charDesc');
+                const bgInput = document.getElementById('bgDesc');
+                let charVal = charInput.value.trim();
+                let bgVal = bgInput.value.trim();
+
+                // 2. AUTO TRANSLATE (Blocking)
+                const translatedChar = await translateIfNeeded(charVal);
+                const translatedBg = await translateIfNeeded(bgVal);
+
+                // Update Inputs so user sees the English
+                if(charVal !== translatedChar) charInput.value = translatedChar;
+                if(bgVal !== translatedBg) bgInput.value = translatedBg;
+
+                // 3. Continue Generation with English
+                let desc = translatedChar;
+                let bgPromptText = translatedBg;
                 
-                // Radio Safety Check
+                if (btn) btn.innerHTML = originalBtnText; // Restore Button
+
+                // --- Standard Generation Logic ---
+                const model = document.getElementById('aiModel').value;
+                let subCount = document.getElementById('subCount').value;
                 const focusTypeElem = document.querySelector('input[name="focusType"]:checked');
                 const focusType = focusTypeElem ? focusTypeElem.value : 'face';
-
                 const shotSizeElem = document.querySelector('input[name="shotSize"]:checked');
                 const shotSizeVal = shotSizeElem ? shotSizeElem.value : 'ms';
-
                 const isHorizonLocked = document.getElementById('horizonLock').checked;
-                let bgInput = document.getElementById('bgDesc').value.trim();
                 const isWhiteMode = document.getElementById('whiteBg').checked;
                 const iw = document.getElementById('iw').value;
                 const ar = document.getElementById('ar').value;
 
-                // Defaults
                 if(desc === "") desc = "Subject"; 
                 desc = desc.replace(/,\s*$/, "");
                 if(!subCount) subCount = "1";
@@ -393,12 +394,11 @@
 
                 let bgPrompt = "";
                 if (isWhiteMode) bgPrompt = "Solid White Background";
-                else if (bgInput !== "") bgPrompt = `${bgInput}`;
+                else if (bgPromptText !== "") bgPrompt = `${bgPromptText}`;
 
                 let angleText = "";
                 let gazeText = "";
                 
-                // High Angle Stability Logic
                 const isHigh = elevation === 'High';
                 const stabilityAnchor = isHigh ? "Strictly vertical orientation, upright posture, the floor is positioned at the bottom of the frame" : "";
 
@@ -427,18 +427,9 @@
 
                 let anglePrefix = "";
                 let camPosDesc = ""; 
-                if (elevation === 'High') { 
-                    anglePrefix = "STEEP HIGH ANGLE (Top-down view)"; 
-                    camPosDesc = "Camera is high above looking down with a fixed top-down perspective"; 
-                }
-                else if (elevation === 'Eye') { 
-                    anglePrefix = "EYE-LEVEL SHOT"; 
-                    camPosDesc = "Camera placed at subject's eye level"; 
-                }
-                else if (elevation === 'Low') { 
-                    anglePrefix = "EXTREME LOW ANGLE (Worm's-eye view)"; 
-                    camPosDesc = "Camera placed on the ground looking up"; 
-                }
+                if (elevation === 'High') { anglePrefix = "STEEP HIGH ANGLE (Top-down view)"; camPosDesc = "Camera is high above looking down with a fixed top-down perspective"; }
+                else if (elevation === 'Eye') { anglePrefix = "EYE-LEVEL SHOT"; camPosDesc = "Camera placed at subject's eye level"; }
+                else if (elevation === 'Low') { anglePrefix = "EXTREME LOW ANGLE (Worm's-eye view)"; camPosDesc = "Camera placed on the ground looking up"; }
 
                 let finalPrompt = "";
 
