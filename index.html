@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v5.0 (Official SDK)</title>
+    <title>Smithy Director Studio v5.2 (Stable Default)</title>
     <style>
         /* v2.0 블랙 에디션 디자인 유지 */
         :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
@@ -84,8 +84,8 @@
         <a class="header-title-box" href="https://www.youtube.com/@countingstars-k5t" target="_blank">
             <img src="logo_caountingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v5.0</h1>
-                <span class="sub-title">Counting Stars Official Tool (Official SDK)</span>
+                <h1>SMITHY DIRECTOR STUDIO v5.2</h1>
+                <span class="sub-title">Counting Stars Official Tool (Gemini Pro Default)</span>
             </div>
         </a>
 
@@ -113,8 +113,9 @@
                 <div class="api-row">
                     <span style="font-size:12px; font-weight:bold; width: 100px;">🛠️ 번역 모델:</span>
                     <select id="transModel">
-                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (추천)</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                        <option value="gemini-pro" selected>Gemini Pro (안정형 - 추천)</option>
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (빠름)</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (고성능)</option>
                     </select>
                 </div>
             </div>
@@ -267,19 +268,8 @@
         <div id="copyMsg" class="copy-msg" data-lang="copy_msg">✨ 클립보드에 복사되었습니다! Ctrl+V 하세요.</div>
     </div>
 
-    <script type="module">
-        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
-        // --- GLOBAL FUNCTIONS FOR HTML ACCESS ---
-        window.setLanguage = setLanguage;
-        window.loadApiKey = loadApiKey;
-        window.saveApiKey = saveApiKey;
-        window.updateOptions = updateOptions;
-        window.translateText = translateText;
-        window.gen = gen;
-        window.manualCopy = manualCopy;
-        // ---------------------------------------
-
+    <script>
+        // --- 1. SETTINGS & LANGUAGE ---
         const translations = {
             ko: { char_label: "1. 캐릭터 묘사 (Character)", char_ph: "예: 12세 한국 소녀 웅지... (비워두면 원본 이미지 사용)", trans_btn: "🌐 번역 (KO->EN)", count_label: "2. 인원 수", focus_lock_label: "3. 구도 중심 & 수평 고정", focus_face: "🎯 얼굴 고정", focus_scene: "🌐 화면 중심", horizon_lock: "🔒 수평 고정", dist_label: "4. 카메라 거리 (Shot Distance)", dist_ecu: "초근접<br>(눈/입)", dist_cu: "얼굴<br>(Face)", dist_ms: "상반신<br>(Waist)", dist_fs: "전신<br>(Full Body)", dist_ws: "원경<br>(Wide)", bg_label: "5. 배경 묘사 (Background)", bg_ph: "예: 사이버펑크 도시... (비워두면 원본 배경 사용)", white_bg: "⬜ 화이트 스튜디오", model_label: "🤖 6. 타겟 AI 모델 (Target Model)", iw_label: "이미지 가중치 (--iw)", ar_label: "화면 비율 (--ar)", btn_side: "측면", btn_45: "45도", btn_front: "정면", btn_back: "후면", result_label: "생성된 프롬프트 (Result Prompt)", copy_btn: "📋 프롬프트 복사하기", copy_msg: "✨ 복사되었습니다! Ctrl+V 하세요.", cta_text: "✨ 구독&좋아요는 큰 힘이 됩니다!", btn_guide: "📖 가이드북", btn_channel: "📺 공식 채널" },
             en: { char_label: "1. Character Description", char_ph: "Ex: 12yo Korean girl... (Leave empty for source image)", trans_btn: "🌐 Translate", count_label: "2. Subject Count", focus_lock_label: "3. Focus & Horizon", focus_face: "🎯 Face Focus", focus_scene: "🌐 Scene Focus", horizon_lock: "🔒 Lock Horizon", dist_label: "4. Shot Distance", dist_ecu: "Extreme<br>Close-up", dist_cu: "Close-up<br>(Face)", dist_ms: "Waist<br>Shot", dist_fs: "Full Body<br>Shot", dist_ws: "Wide<br>Shot", bg_label: "5. Background Description", bg_ph: "Ex: Cyberpunk city... (Leave empty for source bg)", white_bg: "⬜ White Studio", model_label: "🤖 6. Target AI Model", iw_label: "Image Weight (--iw)", ar_label: "Aspect Ratio (--ar)", btn_side: "Side", btn_45: "45°", btn_front: "Front", btn_back: "Back", result_label: "Result Prompt (English Output)", copy_btn: "📋 Copy Prompt", copy_msg: "✨ Copied to clipboard!", cta_text: "✨ Subscribe & Like helps a lot!", btn_guide: "📖 Guidebook", btn_channel: "📺 Official Channel" },
@@ -296,6 +286,7 @@
 
         document.addEventListener('keydown', function(e) { if ([123, 73, 67, 74, 85, 83].includes(e.keyCode) && (e.ctrlKey || e.keyCode == 123)) { e.preventDefault(); return false; } });
         
+        // --- 2. API LOGIC (PURE FETCH - NO SDK) ---
         function saveApiKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
             if(key) localStorage.setItem('smithy_gemini_key', key);
@@ -316,31 +307,41 @@
 
             const btn = document.querySelector(`button[onclick="translateText('${targetId}')"]`);
             const originalText = btn.innerText;
-            btn.innerText = "⏳...";
+            btn.innerText = "⏳ 처리중...";
             btn.classList.add('processing');
             btn.disabled = true;
 
             try {
-                // --- OFFICIAL SDK LOGIC ---
-                const genAI = new GoogleGenerativeAI(apiKey);
-                const model = genAI.getGenerativeModel({ model: modelName });
-
-                const prompt = `Translate the following text to English for image prompting. Keep it concise, descriptive, and use comma-separated keywords if applicable. Return ONLY the translated text. Text: "${text}"`;
+                // 구글 공식 REST API URL (SDK 없이 직접 호출)
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
                 
-                const result = await model.generateContent(prompt);
-                const response = await result.response;
-                const translatedText = response.text();
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `Translate this to English for Image Prompting. Concise keywords. Text: "${text}"`
+                            }]
+                        }]
+                    })
+                });
 
-                if (translatedText) {
-                    inputElem.value = translatedText.trim();
+                const data = await response.json();
+
+                if (response.ok && data.candidates && data.candidates.length > 0) {
+                     inputElem.value = data.candidates[0].content.parts[0].text.trim();
                 } else {
-                    alert("Google returned empty text.");
+                    // 에러 발생시 상세 내용 표시
+                    console.error("API Error Details:", data);
+                    let errMsg = "알 수 없는 에러";
+                    if(data.error) errMsg = data.error.message;
+                    
+                    alert(`🚫 에러 발생!\n\n이유: ${errMsg}\n\n💡 팁: '번역 모델'을 다른 걸로 바꿔보세요 (예: Gemini Pro).`);
                 }
-                // --------------------------
 
             } catch (e) {
-                alert("Error: " + e.message + "\n\n(API 키가 'Generative Language API' 사용 설정이 되어있는지 Google Cloud Console에서 확인해보세요)");
-                console.error(e);
+                alert(`🚫 네트워크 에러: ${e.message}\n\n인터넷 연결을 확인하거나, API 키가 올바른지 확인하세요.`);
             }
             
             btn.innerText = originalText;
@@ -348,6 +349,7 @@
             btn.disabled = false;
         }
 
+        // --- 3. UI & PROMPT LOGIC ---
         function updateOptions() {
             const model = document.getElementById('aiModel').value;
             const h1 = document.querySelector('h1');
@@ -418,21 +420,6 @@
 
             let poseConstraint = isHorizonLocked ? "**🔴 CRITICAL: Group formation aligned relative to horizon.**" : "";
             let headConstraint = (elevation === 'Low' && (angle === 'Left45' || angle === 'Right45')) ? "**🔴 CRITICAL: Keep chin level, do not tilt head back.**" : "";
-
-            let anglePrefix = "";
-            let camPosDesc = ""; 
-            if (elevation === 'High') { 
-                anglePrefix = "STEEP HIGH ANGLE (Top-down view)"; 
-                camPosDesc = "Camera is high above looking down with a fixed top-down perspective"; 
-            }
-            else if (elevation === 'Eye') { 
-                anglePrefix = "EYE-LEVEL SHOT"; 
-                camPosDesc = "Camera placed at subject's eye level"; 
-            }
-            else if (elevation === 'Low') { 
-                anglePrefix = "EXTREME LOW ANGLE (Worm's-eye view)"; 
-                camPosDesc = "Camera placed on the ground looking up"; 
-            }
 
             let finalPrompt = "";
 
