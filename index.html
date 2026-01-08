@@ -3,42 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v5.0 (Auto-Trans)</title>
+    <title>Smithy Director Studio v5.2 (Auto-Trans Restored)</title>
     <style>
-        /* v2.0 블랙 에디션 디자인 + v5.0 업데이트 */
-        :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
+        /* v5.2 디자인: 깔끔하고 직관적으로 */
+        :root { --neon: #00ffcc; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
         body { background-color: var(--bg); color: #e0e0e0; font-family: 'Pretendard', 'Segoe UI', sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto; line-height: 1.5; user-select: none; }
         
-        .header-container { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--neon); padding-bottom: 20px; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
+        .header-container { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--neon); padding-bottom: 20px; margin-bottom: 30px; }
         .header-title-box { display: flex; align-items: center; gap: 15px; cursor: pointer; text-decoration: none; }
-        .channel-logo { width: 90px; height: auto; border: none; box-shadow: none; object-fit: contain; }
-        h1 { color: var(--neon); margin: 0; font-size: 24px; line-height: 1.2; text-shadow: 0 0 10px rgba(0,255,204,0.2); }
+        .channel-logo { width: 80px; height: auto; border: none; }
+        h1 { color: var(--neon); margin: 0; font-size: 24px; text-shadow: 0 0 10px rgba(0,255,204,0.2); }
         .sub-title { font-size: 13px; color: #888; letter-spacing: 1px; }
 
         .top-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-        .lang-switcher { display: flex; gap: 5px; }
-        .lang-btn { background: #222; border: 1px solid #444; color: #888; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; }
-        .lang-btn:hover { border-color: var(--neon); color: #fff; }
-        .lang-btn.active { background: var(--neon); color: #000; border-color: var(--neon); }
-
-        .link-group { display: flex; align-items: center; gap: 8px; }
-        .cta-text { font-size: 11px; color: var(--pro); font-weight: bold; animation: blink 2s infinite; margin-right: 5px; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .nav-btn { padding: 6px 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 20px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
-        .nav-btn:hover { border-color: var(--neon); transform: translateY(-2px); background: #444; }
+        .nav-btn:hover { border-color: var(--neon); background: #444; }
         
         .settings-panel { background: var(--panel); padding: 25px; border-radius: 12px; margin-bottom: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; box-shadow: 0 4px 15px rgba(255,255,255,0.05); }
         .full-width { grid-column: span 2; }
         
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #fff; font-size: 14px; }
-        input[type="text"], select, input[type="number"], input[type="password"] { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input[type="text"], select, input[type="number"] { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
         input:focus, select:focus { border-color: var(--neon); outline: none; }
 
         .input-group { display: flex; gap: 10px; }
-        .tool-btn { padding: 0 15px; background: #444; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: nowrap; transition: 0.2s; }
-        .tool-btn:hover { background: #666; }
-        .tool-btn.processing { background: var(--pro); color: #000; cursor: wait; }
-
+        
         .radio-group { display: flex; gap: 10px; background: #000; padding: 5px; border-radius: 6px; border: 1px solid #444; height: 42px; box-sizing: border-box; }
         .radio-option { flex: 1; }
         .radio-option input[type="radio"] { display: none; }
@@ -72,83 +61,57 @@
         .copy-btn:hover { background: var(--neon); color: #000; }
         .copy-msg { color: var(--neon); font-size: 14px; text-align: right; height: 20px; margin-top: 5px; opacity: 0; transition: opacity 0.5s; }
         
-        .api-section { background: #2a2a2a; padding: 15px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .api-row { display: flex; align-items: center; gap: 10px; }
-        .api-section input { border: none; background: #222; padding: 8px; color: var(--neon); font-family: monospace; border-radius: 4px; flex-grow: 1; }
-        .api-section select { width: auto; background: #222; border: 1px solid #555; color: #fff; padding: 8px; }
+        .loading-text { font-size: 11px; color: var(--banana); animation: blink 1s infinite; display: none; margin-left: 10px; }
+        @keyframes blink { 50% { opacity: 0.5; } }
     </style>
 </head>
-<body onload="setLanguage('ko'); loadApiKey();">
+<body>
 
     <div class="header-container">
         <a class="header-title-box" href="https://www.youtube.com/@countingstars-k5t" target="_blank">
             <img src="logo_countingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v5.0</h1>
-                <span class="sub-title">Auto-Translate Edition</span>
+                <h1>SMITHY DIRECTOR STUDIO v5.2</h1>
+                <span class="sub-title">Counting Stars Official Tool (Auto-Trans Restored)</span>
             </div>
         </a>
 
         <div class="top-controls">
-            <div class="lang-switcher">
-                <button class="lang-btn active" onclick="setLanguage('ko')">🇰🇷 KR</button>
-                <button class="lang-btn" onclick="setLanguage('en')">🇺🇸 EN</button>
-                <button class="lang-btn" onclick="setLanguage('jp')">🇯🇵 JP</button>
-            </div>
-            <div class="link-group">
-                <span class="cta-text" data-lang="cta_text">✨ 구독&좋아요는 큰 힘이 됩니다!</span>
-                <a href="Smithy_Guide_v3.3_Final.html" target="_blank" class="nav-btn" data-lang="btn_guide">📖 가이드북</a>
-                <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="nav-btn" style="border-color: #ff4d4d;" data-lang="btn_channel">📺 공식 채널</a>
-            </div>
+            <a href="https://www.youtube.com/@countingstars-k5t" target="_blank" class="nav-btn" style="border-color: #ff4d4d;">📺 공식 채널</a>
         </div>
     </div>
 
     <div class="settings-panel">
+        
         <div class="full-width">
-             <div class="api-section">
-                <div class="api-row">
-                    <span style="font-size:12px; font-weight:bold; width: 100px;">🔑 GEMINI KEY:</span>
-                    <input type="password" id="apiKeyInput" placeholder="AIzaSy... (필수: 자동번역용)" onchange="saveApiKey()">
-                </div>
-                <div class="api-row">
-                    <span style="font-size:12px; font-weight:bold; width: 100px;">🛠️ 번역 모델:</span>
-                    <select id="transModel">
-                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (매우 빠름)</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (정확함)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="full-width">
-            <label data-lang="char_label">1. 캐릭터 묘사 (Character - 한글 입력 가능!)</label>
+            <label>1. 캐릭터 묘사 <span id="transStatus1" class="loading-text">🔄 번역중...</span></label>
             <div class="input-group">
-                <input type="text" id="charDesc" data-placeholder="char_ph">
+                <input type="text" id="charDesc" placeholder="예: 12세 한국 소녀 웅지 (한글로 입력하면 알아서 번역됩니다)">
             </div>
         </div>
 
         <div class="full-width" style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
             <div>
-                <label data-lang="count_label">2. 인원 수</label>
+                <label>2. 인원 수</label>
                 <input type="number" id="subCount" value="1" min="1" max="10">
             </div>
             <div>
-                <label data-lang="focus_lock_label">3. 구도 중심 & 수평 고정</label>
+                <label>3. 구도 중심 & 수평 고정</label>
                 <div style="display: flex; gap: 10px;">
                     <div class="radio-group" style="flex: 2;">
                         <div class="radio-option">
                             <input type="radio" id="focusFace" name="focusType" value="face" checked>
-                            <label for="focusFace" data-lang="focus_face">🎯 얼굴 고정</label>
+                            <label for="focusFace">🎯 얼굴 고정</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="focusScene" name="focusType" value="scene">
-                            <label for="focusScene" data-lang="focus_scene">🌐 화면 중심</label>
+                            <label for="focusScene">🌐 화면 중심</label>
                         </div>
                     </div>
                     <div style="flex: 1.5;">
                         <label class="checkbox-wrapper">
                             <input type="checkbox" id="horizonLock" checked>
-                            <span class="chk-label" data-lang="horizon_lock">🔒 수평 고정</span>
+                            <span class="chk-label">🔒 수평 고정</span>
                         </label>
                     </div>
                 </div>
@@ -156,48 +119,48 @@
         </div>
 
         <div class="full-width">
-            <label style="color:var(--neon)" data-lang="dist_label">4. 카메라 거리 (Shot Distance)</label>
+            <label style="color:var(--neon)">4. 카메라 거리 (Shot Distance)</label>
             <div class="shot-size-group">
                 <div class="size-option">
                     <input type="radio" id="s_ecu" name="shotSize" value="ecu">
-                    <label for="s_ecu"><span class="icon">👁️</span><span data-lang="dist_ecu">초근접</span></label>
+                    <label for="s_ecu"><span class="icon">👁️</span><span>초근접</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_cu" name="shotSize" value="cu">
-                    <label for="s_cu"><span class="icon">👤</span><span data-lang="dist_cu">얼굴</span></label>
+                    <label for="s_cu"><span class="icon">👤</span><span>얼굴</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_ms" name="shotSize" value="ms" checked>
-                    <label for="s_ms"><span class="icon">👕</span><span data-lang="dist_ms">상반신</span></label>
+                    <label for="s_ms"><span class="icon">👕</span><span>상반신</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_fs" name="shotSize" value="fs">
-                    <label for="s_fs"><span class="icon">🧍</span><span data-lang="dist_fs">전신</span></label>
+                    <label for="s_fs"><span class="icon">🧍</span><span>전신</span></label>
                 </div>
                 <div class="size-option">
                     <input type="radio" id="s_ws" name="shotSize" value="ws">
-                    <label for="s_ws"><span class="icon">🏔️</span><span data-lang="dist_ws">원경</span></label>
+                    <label for="s_ws"><span class="icon">🏔️</span><span>원경</span></label>
                 </div>
             </div>
         </div>
         
         <div class="full-width bg-group" style="display: flex; gap: 15px; align-items: flex-end;">
             <div style="flex-grow: 1;">
-                <label data-lang="bg_label">5. 배경 묘사 (Background - 한글 입력 가능!)</label>
+                <label>5. 배경 묘사 <span id="transStatus2" class="loading-text">🔄 번역중...</span></label>
                 <div class="input-group">
-                    <input type="text" id="bgDesc" data-placeholder="bg_ph">
+                    <input type="text" id="bgDesc" placeholder="예: 사이버펑크 도시 야경 (한글 입력 OK)">
                 </div>
             </div>
             <div style="flex-basis: 250px;">
                 <label class="checkbox-wrapper">
                     <input type="checkbox" id="whiteBg">
-                    <span class="chk-label" data-lang="white_bg">⬜ 화이트 스튜디오</span>
+                    <span class="chk-label">⬜ 화이트 스튜디오</span>
                 </label>
             </div>
         </div>
 
         <div class="full-width" style="border-top: 1px solid #333; margin-top: 10px; padding-top: 15px;">
-            <label style="color: var(--neon);" data-lang="model_label">🤖 6. 타겟 AI 모델 (Target Model)</label>
+            <label style="color: var(--neon);">🤖 6. 타겟 AI 모델 (Target Model)</label>
             <select id="aiModel" onchange="updateOptions()">
                 <option value="mj">Midjourney / Niji 6 (Recommended)</option>
                 <option value="nano">🍌 NanoBanana (Keywords)</option>
@@ -209,7 +172,7 @@
 
         <div style="display: flex; gap: 20px;">
             <div style="flex:1;">
-                <label id="iwLabel" data-lang="iw_label">이미지 가중치 (--iw)</label>
+                <label id="iwLabel">이미지 가중치 (--iw)</label>
                 <select id="iw">
                     <option value="2">2.0 (Max)</option>
                     <option value="1.5">1.5 (High)</option>
@@ -217,7 +180,7 @@
                 </select>
             </div>
             <div style="flex:1;">
-                <label id="arLabel" data-lang="ar_label">화면 비율 (--ar)</label>
+                <label id="arLabel">화면 비율 (--ar)</label>
                 <select id="ar">
                     <option value="3:2">3:2 (Standard)</option>
                     <option value="16:9">16:9 (Cinematic)</option>
@@ -230,144 +193,104 @@
 
     <div class="grid-header">--- LOW ANGLE (앙각) ---</div>
     <div class="camera-grid">
-        <button class="shot-btn" onclick="gen('Low', 'FarLeft', this)"><span class="icon">↖️</span><span data-lang="btn_side">L.Side</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'Left45', this)"><span class="icon">↖️</span><span data-lang="btn_45">L.45°</span></button>
-        <button class="shot-btn center" onclick="gen('Low', 'Front', this)"><span class="icon">⬆️</span><span data-lang="btn_front">Front</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'Right45', this)"><span class="icon">↗️</span><span data-lang="btn_45">R.45°</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'FarRight', this)"><span class="icon">↗️</span><span data-lang="btn_side">R.Side</span></button>
-        <button class="shot-btn" onclick="gen('Low', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'FarLeft', this)"><span class="icon">↖️</span><span>L.Side</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Left45', this)"><span class="icon">↖️</span><span>L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('Low', 'Front', this)"><span class="icon">⬆️</span><span>Front</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Right45', this)"><span class="icon">↗️</span><span>R.45°</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'FarRight', this)"><span class="icon">↗️</span><span>R.Side</span></button>
+        <button class="shot-btn" onclick="gen('Low', 'Back', this)"><span class="icon">🔙</span><span>Back</span></button>
     </div>
 
     <div class="grid-header">--- EYE LEVEL (눈높이) ---</div>
     <div class="camera-grid">
-        <button class="shot-btn" onclick="gen('Eye', 'FarLeft', this)"><span class="icon">⬅️</span><span data-lang="btn_side">L.Side</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'Left45', this)"><span class="icon">⬅️</span><span data-lang="btn_45">L.45°</span></button>
-        <button class="shot-btn center" onclick="gen('Eye', 'Front', this)"><span class="icon">⏺️</span><span data-lang="btn_front">Front</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'Right45', this)"><span class="icon">➡️</span><span data-lang="btn_45">R.45°</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'FarRight', this)"><span class="icon">➡️</span><span data-lang="btn_side">R.Side</span></button>
-        <button class="shot-btn" onclick="gen('Eye', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'FarLeft', this)"><span class="icon">⬅️</span><span>L.Side</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Left45', this)"><span class="icon">⬅️</span><span>L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('Eye', 'Front', this)"><span class="icon">⏺️</span><span>Front</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Right45', this)"><span class="icon">➡️</span><span>R.45°</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'FarRight', this)"><span class="icon">➡️</span><span>R.Side</span></button>
+        <button class="shot-btn" onclick="gen('Eye', 'Back', this)"><span class="icon">🔙</span><span>Back</span></button>
     </div>
 
     <div class="grid-header">--- HIGH ANGLE (부감) ---</div>
     <div class="camera-grid">
-        <button class="shot-btn" onclick="gen('High', 'FarLeft', this)"><span class="icon">↙️</span><span data-lang="btn_side">L.Side</span></button>
-        <button class="shot-btn" onclick="gen('High', 'Left45', this)"><span class="icon">↙️</span><span data-lang="btn_45">L.45°</span></button>
-        <button class="shot-btn center" onclick="gen('High', 'Front', this)"><span class="icon">⬇️</span><span data-lang="btn_front">Front</span></button>
-        <button class="shot-btn" onclick="gen('High', 'Right45', this)"><span class="icon">↘️</span><span data-lang="btn_45">R.45°</span></button>
-        <button class="shot-btn" onclick="gen('High', 'FarRight', this)"><span class="icon">↘️</span><span data-lang="btn_side">R.Side</span></button>
-        <button class="shot-btn" onclick="gen('High', 'Back', this)"><span class="icon">🔙</span><span data-lang="btn_back">Back</span></button>
+        <button class="shot-btn" onclick="gen('High', 'FarLeft', this)"><span class="icon">↙️</span><span>L.Side</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Left45', this)"><span class="icon">↙️</span><span>L.45°</span></button>
+        <button class="shot-btn center" onclick="gen('High', 'Front', this)"><span class="icon">⬇️</span><span>Front</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Right45', this)"><span class="icon">↘️</span><span>R.45°</span></button>
+        <button class="shot-btn" onclick="gen('High', 'FarRight', this)"><span class="icon">↘️</span><span>R.Side</span></button>
+        <button class="shot-btn" onclick="gen('High', 'Back', this)"><span class="icon">🔙</span><span>Back</span></button>
     </div>
 
     <div class="output-section">
-        <label data-lang="result_label">생성된 프롬프트 (Result Prompt)</label>
+        <label>생성된 프롬프트 (Result Prompt)</label>
         <textarea id="resultPrompt" readonly onclick="this.select()"></textarea>
-        <button class="copy-btn" onclick="manualCopy()" data-lang="copy_btn">📋 프롬프트 복사하기</button>
-        <div id="copyMsg" class="copy-msg" data-lang="copy_msg">✨ 클립보드에 복사되었습니다! Ctrl+V 하세요.</div>
+        <button class="copy-btn" onclick="manualCopy()">📋 프롬프트 복사하기</button>
+        <div id="copyMsg" class="copy-msg">✨ 클립보드에 복사되었습니다! Ctrl+V 하세요.</div>
     </div>
 
     <script>
-        const translations = {
-            ko: { char_label: "1. 캐릭터 묘사 (한글 입력시 자동번역)", char_ph: "예: 12세 한국 소녀... (자동번역 됩니다)", count_label: "2. 인원 수", focus_lock_label: "3. 구도 중심 & 수평 고정", focus_face: "🎯 얼굴 고정", focus_scene: "🌐 화면 중심", horizon_lock: "🔒 수평 고정", dist_label: "4. 카메라 거리 (Shot Distance)", dist_ecu: "초근접<br>(눈/입)", dist_cu: "얼굴<br>(Face)", dist_ms: "상반신<br>(Waist)", dist_fs: "전신<br>(Full Body)", dist_ws: "원경<br>(Wide)", bg_label: "5. 배경 묘사 (한글 입력시 자동번역)", bg_ph: "예: 사이버펑크 도시... (자동번역 됩니다)", white_bg: "⬜ 화이트 스튜디오", model_label: "🤖 6. 타겟 AI 모델 (Target Model)", iw_label: "이미지 가중치 (--iw)", ar_label: "화면 비율 (--ar)", btn_side: "측면", btn_45: "45도", btn_front: "정면", btn_back: "후면", result_label: "생성된 프롬프트 (Result Prompt)", copy_btn: "📋 프롬프트 복사하기", copy_msg: "✨ 복사되었습니다! Ctrl+V 하세요.", cta_text: "✨ 구독&좋아요는 큰 힘이 됩니다!", btn_guide: "📖 가이드북", btn_channel: "📺 공식 채널" },
-            en: { char_label: "1. Character Description (Auto-Trans)", char_ph: "Ex: 12yo Korean girl...", count_label: "2. Subject Count", focus_lock_label: "3. Focus & Horizon", focus_face: "🎯 Face Focus", focus_scene: "🌐 Scene Focus", horizon_lock: "🔒 Lock Horizon", dist_label: "4. Shot Distance", dist_ecu: "Extreme<br>Close-up", dist_cu: "Close-up<br>(Face)", dist_ms: "Waist<br>Shot", dist_fs: "Full Body<br>Shot", dist_ws: "Wide<br>Shot", bg_label: "5. Background Description (Auto-Trans)", bg_ph: "Ex: Cyberpunk city...", white_bg: "⬜ White Studio", model_label: "🤖 6. Target AI Model", iw_label: "Image Weight (--iw)", ar_label: "Aspect Ratio (--ar)", btn_side: "Side", btn_45: "45°", btn_front: "Front", btn_back: "Back", result_label: "Result Prompt (English Output)", copy_btn: "📋 Copy Prompt", copy_msg: "✨ Copied to clipboard!", cta_text: "✨ Subscribe & Like helps a lot!", btn_guide: "📖 Guidebook", btn_channel: "📺 Official Channel" },
-            jp: { char_label: "1. キャラクター描写 (自動翻訳)", char_ph: "例: 12歳の少女... (自動翻訳)", count_label: "2. 人数", focus_lock_label: "3. 構図の中心 & 水平固定", focus_face: "🎯 顔に固定", focus_scene: "🌐 画面中心", horizon_lock: "🔒 水平固定", dist_label: "4. カメラ距離 (Shot Distance)", dist_ecu: "超接写<br>(目/口)", dist_cu: "アップ<br>(顔)", dist_ms: "バ스트<br>アップ", dist_fs: "全身<br>(Full Body)", dist_ws: "遠景<br>(Wide)", bg_label: "5. 背景描写 (自動翻訳)", bg_ph: "例: サイバーパンクな街... (自動翻訳)", white_bg: "⬜ 白背景 (スタジオ)", model_label: "🤖 6. AIモデル選択", iw_label: "画像の重み (--iw)", ar_label: "画面比率 (--ar)", btn_side: "側面", btn_45: "45度", btn_front: "正面", btn_back: "背面", result_label: "生成されたプロンプト (英語)", copy_btn: "📋 コピーする", copy_msg: "✨ コピーしました！", cta_text: "✨ チャンネル登録と高評価は大きな力になります！", btn_guide: "📖 ガ이드북", btn_channel: "📺 公式チャンネル" }
-        };
-
-        function setLanguage(lang) {
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll(`.lang-btn[onclick="setLanguage('${lang}')"]`).forEach(btn => btn.classList.add('active'));
-            const data = translations[lang];
-            document.querySelectorAll('[data-lang]').forEach(el => { const key = el.getAttribute('data-lang'); if (data[key]) el.innerHTML = data[key]; });
-            document.querySelectorAll('[data-placeholder]').forEach(el => { const key = el.getAttribute('data-placeholder'); if (data[key]) el.placeholder = data[key]; });
-        }
-
+        // 키보드 보안
         document.addEventListener('keydown', function(e) { if ([123, 73, 67, 74, 85, 83].includes(e.keyCode) && (e.ctrlKey || e.keyCode == 123)) { e.preventDefault(); return false; } });
-        
-        function saveApiKey() {
-            const key = document.getElementById('apiKeyInput').value.trim();
-            if(key) localStorage.setItem('smithy_gemini_key', key);
-        }
-        function loadApiKey() {
-            const key = localStorage.getItem('smithy_gemini_key');
-            if(key) document.getElementById('apiKeyInput').value = key;
-        }
-
-        // --- NEW AUTO TRANSLATOR ---
-        async function translateIfNeeded(text) {
-            const apiKey = document.getElementById('apiKeyInput').value.trim();
-            const modelName = document.getElementById('transModel').value;
-            
-            // Check if text has Korean characters
-            const hasKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text);
-            
-            if (!apiKey || !text || !hasKorean) return text; // Skip if no key or no Korean
-
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `Translate to concise English descriptive keywords for AI image generation: "${text}"`
-                            }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
-                    return data.candidates[0].content.parts[0].text.trim();
-                }
-            } catch (e) {
-                console.error("Trans Error", e);
-            }
-            return text; // Fallback to original
-        }
 
         function updateOptions() {
             const model = document.getElementById('aiModel').value;
             const h1 = document.querySelector('h1');
             const header = document.querySelector('.header-container');
             let color = '#00ffcc'; 
-            if (model === 'nano') color = 'var(--banana)'; else if (model === 'nano_pro') color = 'var(--pro)';
+            if (model === 'nano') color = '#ffe135'; else if (model === 'nano_pro') color = '#ff9900';
             h1.style.color = color; header.style.borderBottomColor = color;
             document.querySelectorAll('.shot-btn.active').forEach(btn => { btn.style.backgroundColor = color; btn.style.boxShadow = `0 0 15px ${color}`; });
             document.documentElement.style.setProperty('--neon', color);
         }
 
+        // --- 🚀 진짜 무료 자동번역 로직 (MyMemory API) ---
+        async function autoTranslate(text) {
+            if (!text || !/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text)) return text; // 한글 없으면 패스
+
+            try {
+                // MyMemory 무료 API 사용 (일일 제한 있음, 하지만 개인용으론 충분)
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ko|en`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.responseData && data.responseData.translatedText) {
+                    return data.responseData.translatedText;
+                } else {
+                    return text; // 실패시 원본 반환
+                }
+            } catch (e) {
+                console.error("번역 실패:", e);
+                return text; // 에러시 원본 반환
+            }
+        }
+
         async function gen(elevation, angle, btn) {
             try {
-                // Visual Feedback
+                // 1. UI 시각 효과 (로딩중)
                 const originalBtnText = btn ? btn.innerHTML : "";
                 if (btn) {
                      document.querySelectorAll('.shot-btn').forEach(b => { b.classList.remove('active'); b.style.backgroundColor = ""; b.style.boxShadow = ""; b.style.color = ""; b.style.borderColor = ""; }); 
                      btn.classList.add('active'); 
-                     btn.innerHTML = "♻️..."; // Loading Icon
+                     btn.innerHTML = "⏳..";
                 }
 
-                // 1. Get Raw Values
-                const charInput = document.getElementById('charDesc');
-                const bgInput = document.getElementById('bgDesc');
-                let charVal = charInput.value.trim();
-                let bgVal = bgInput.value.trim();
+                // 2. 입력값 가져오기
+                let descRaw = document.getElementById('charDesc').value.trim();
+                let bgRaw = document.getElementById('bgDesc').value.trim();
 
-                // 2. AUTO TRANSLATE (Blocking)
-                const translatedChar = await translateIfNeeded(charVal);
-                const translatedBg = await translateIfNeeded(bgVal);
+                // 3. 번역 수행 (비동기)
+                if (descRaw && /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(descRaw)) document.getElementById('transStatus1').style.display = 'inline';
+                if (bgRaw && /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(bgRaw)) document.getElementById('transStatus2').style.display = 'inline';
 
-                // Update Inputs so user sees the English
-                if(charVal !== translatedChar) charInput.value = translatedChar;
-                if(bgVal !== translatedBg) bgInput.value = translatedBg;
+                let desc = await autoTranslate(descRaw);
+                let bgInput = await autoTranslate(bgRaw);
 
-                // 3. Continue Generation with English
-                let desc = translatedChar;
-                let bgPromptText = translatedBg;
-                
-                if (btn) btn.innerHTML = originalBtnText; // Restore Button
+                // 번역 완료 후 UI 복구
+                document.getElementById('transStatus1').style.display = 'none';
+                document.getElementById('transStatus2').style.display = 'none';
+                if (btn) btn.innerHTML = originalBtnText;
 
-                // --- Standard Generation Logic ---
-                const model = document.getElementById('aiModel').value;
+                // 4. 나머지 프롬프트 조립 로직 (기존과 동일)
                 let subCount = document.getElementById('subCount').value;
                 const focusTypeElem = document.querySelector('input[name="focusType"]:checked');
                 const focusType = focusTypeElem ? focusTypeElem.value : 'face';
@@ -375,6 +298,7 @@
                 const shotSizeVal = shotSizeElem ? shotSizeElem.value : 'ms';
                 const isHorizonLocked = document.getElementById('horizonLock').checked;
                 const isWhiteMode = document.getElementById('whiteBg').checked;
+                const model = document.getElementById('aiModel').value;
                 const iw = document.getElementById('iw').value;
                 const ar = document.getElementById('ar').value;
 
@@ -394,7 +318,7 @@
 
                 let bgPrompt = "";
                 if (isWhiteMode) bgPrompt = "Solid White Background";
-                else if (bgPromptText !== "") bgPrompt = `${bgPromptText}`;
+                else if (bgInput !== "") bgPrompt = `${bgInput}`;
 
                 let angleText = "";
                 let gazeText = "";
