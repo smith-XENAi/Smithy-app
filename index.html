@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v5.2 (Stable Default)</title>
+    <title>Smithy Director Studio v5.3 (Final Fix)</title>
     <style>
         /* v2.0 블랙 에디션 디자인 유지 */
         :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
@@ -72,8 +72,7 @@
         .copy-btn:hover { background: var(--neon); color: #000; }
         .copy-msg { color: var(--neon); font-size: 14px; text-align: right; height: 20px; margin-top: 5px; opacity: 0; transition: opacity 0.5s; }
         
-        .api-section { background: #2a2a2a; padding: 15px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .api-row { display: flex; align-items: center; gap: 10px; }
+        .api-section { background: #2a2a2a; padding: 15px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .api-section input { border: none; background: #222; padding: 8px; color: var(--neon); font-family: monospace; border-radius: 4px; flex-grow: 1; }
         .api-section select { width: auto; background: #222; border: 1px solid #555; color: #fff; padding: 8px; }
     </style>
@@ -84,8 +83,8 @@
         <a class="header-title-box" href="https://www.youtube.com/@countingstars-k5t" target="_blank">
             <img src="logo_caountingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v5.2</h1>
-                <span class="sub-title">Counting Stars Official Tool (Gemini Pro Default)</span>
+                <h1>SMITHY DIRECTOR STUDIO v5.3</h1>
+                <span class="sub-title">Counting Stars Official Tool (Gemini Pro Fixed)</span>
             </div>
         </a>
 
@@ -106,18 +105,8 @@
     <div class="settings-panel">
         <div class="full-width">
              <div class="api-section">
-                <div class="api-row">
-                    <span style="font-size:12px; font-weight:bold; width: 100px;">🔑 GEMINI KEY:</span>
-                    <input type="password" id="apiKeyInput" placeholder="AIzaSy..." onchange="saveApiKey()">
-                </div>
-                <div class="api-row">
-                    <span style="font-size:12px; font-weight:bold; width: 100px;">🛠️ 번역 모델:</span>
-                    <select id="transModel">
-                        <option value="gemini-pro" selected>Gemini Pro (안정형 - 추천)</option>
-                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (빠름)</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (고성능)</option>
-                    </select>
-                </div>
+                 <span style="font-size:12px; font-weight:bold; width: 120px;">🔑 GEMINI KEY:</span>
+                <input type="password" id="apiKeyInput" placeholder="AIzaSy..." onchange="saveApiKey()">
             </div>
         </div>
 
@@ -286,7 +275,7 @@
 
         document.addEventListener('keydown', function(e) { if ([123, 73, 67, 74, 85, 83].includes(e.keyCode) && (e.ctrlKey || e.keyCode == 123)) { e.preventDefault(); return false; } });
         
-        // --- 2. API LOGIC (PURE FETCH - NO SDK) ---
+        // --- 2. API LOGIC (PURE FETCH - Fixed to Gemini Pro) ---
         function saveApiKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
             if(key) localStorage.setItem('smithy_gemini_key', key);
@@ -298,7 +287,8 @@
 
         async function translateText(targetId) {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
-            const modelName = document.getElementById('transModel').value;
+            // 모델을 'gemini-pro'로 강제 고정 (선택 옵션 삭제)
+            const modelName = "gemini-pro"; 
             const inputElem = document.getElementById(targetId);
             const text = inputElem.value;
             
@@ -332,12 +322,11 @@
                 if (response.ok && data.candidates && data.candidates.length > 0) {
                      inputElem.value = data.candidates[0].content.parts[0].text.trim();
                 } else {
-                    // 에러 발생시 상세 내용 표시
                     console.error("API Error Details:", data);
                     let errMsg = "알 수 없는 에러";
                     if(data.error) errMsg = data.error.message;
                     
-                    alert(`🚫 에러 발생!\n\n이유: ${errMsg}\n\n💡 팁: '번역 모델'을 다른 걸로 바꿔보세요 (예: Gemini Pro).`);
+                    alert(`🚫 에러 발생!\n\n이유: ${errMsg}`);
                 }
 
             } catch (e) {
