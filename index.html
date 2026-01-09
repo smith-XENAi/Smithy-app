@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smithy Director Studio v5.6 (Distance Fixed)</title>
+    <title>Smithy Director Studio v5.7 (Low Angle Fixed)</title>
     <style>
-        /* v5.4 디자인 유지 (요청 외 수정 금지) */
+        /* v5.7: 로우앵글 버그 수정 및 최적화 */
         :root { --neon: #00ffcc; --banana: #ffe135; --pro: #ff9900; --bg: #000000; --panel: #1e1e1e; --btn-bg: #2d2d2d; }
         body { background-color: var(--bg); color: #e0e0e0; font-family: 'Pretendard', 'Segoe UI', sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto; line-height: 1.5; user-select: none; }
         
@@ -79,8 +79,8 @@
         <a class="header-title-box" href="https://www.youtube.com/@countingstarts-k5t" target="_blank">
             <img src="logo_countingstars.jpg" alt="Logo" class="channel-logo" onerror="this.style.display='none'">
             <div>
-                <h1>SMITHY DIRECTOR STUDIO v5.6</h1>
-                <span class="sub-title">Counting Stars Official Tool (Distance Fixed)</span>
+                <h1>SMITHY DIRECTOR STUDIO v5.7</h1>
+                <span class="sub-title">Counting Stars Official Tool (Low Angle Fixed)</span>
             </div>
         </a>
 
@@ -329,7 +329,6 @@
                 if(!subCount) subCount = "1";
 
                 let shotKeyword = ""; 
-                // [거리 수정 적용]: 증명사진 급으로 당기기 위해 샷 사이즈 전체 조정
                 if (shotSizeVal === 'ecu') shotKeyword = "**Macro Extreme Close-up Shot (Eyes and Mouth focus)**";
                 else if (shotSizeVal === 'cu') shotKeyword = "**Tight Face Headshot (Passport ID Style)**"; 
                 else if (shotSizeVal === 'ms') shotKeyword = "**Bust Shot (Chest-up)**"; 
@@ -383,9 +382,26 @@
 
                 let anglePrefix = "";
                 let camPosDesc = ""; 
-                if (elevation === 'High') { anglePrefix = "STEEP HIGH ANGLE (Top-down view)"; camPosDesc = "Camera is high above looking down with a fixed top-down perspective"; }
-                else if (elevation === 'Eye') { anglePrefix = "EYE-LEVEL SHOT"; camPosDesc = "Camera placed at subject's eye level"; }
-                else if (elevation === 'Low') { anglePrefix = "EXTREME LOW ANGLE (Worm's-eye view)"; camPosDesc = "Camera placed on the ground looking up"; }
+                
+                // === 🔴 긴급 수정 v5.7: 로우앵글 + 얼굴샷 충돌 해결 로직 ===
+                if (elevation === 'Low') {
+                    // 얼굴샷(ECU, CU)일 때는 카메라를 땅에서 떼고 턱 밑으로 이동
+                    if (shotSizeVal === 'ecu' || shotSizeVal === 'cu') {
+                        anglePrefix = "LOW ANGLE (Looking Up)"; // Extreme 제거
+                        camPosDesc = "Camera positioned below chin level looking up at the face"; // 바닥(Ground) 제거
+                    } else {
+                        anglePrefix = "EXTREME LOW ANGLE (Worm's-eye view)";
+                        camPosDesc = "Camera placed on the ground looking up";
+                    }
+                }
+                else if (elevation === 'High') { 
+                    anglePrefix = "STEEP HIGH ANGLE (Top-down view)"; 
+                    camPosDesc = "Camera is high above looking down with a fixed top-down perspective"; 
+                }
+                else if (elevation === 'Eye') { 
+                    anglePrefix = "EYE-LEVEL SHOT"; 
+                    camPosDesc = "Camera placed at subject's eye level"; 
+                }
 
                 let finalPrompt = "";
 
